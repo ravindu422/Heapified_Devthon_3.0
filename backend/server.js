@@ -1,0 +1,49 @@
+import dotenv from "dotenv";
+import { connectDB } from "./config/db.js";
+import { intiSocket } from "./config/socket.js";
+import app from "./app.js";
+import mongoose from "mongoose";
+import http from 'http';
+import { logger } from "./utils/logger.js";
+
+dotenv.config();
+
+const PORT = process.env.PORT;
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',')
+
+const server = http.createServer(app);
+
+connectDB();
+
+//Init Socket.io
+const io = intiSocket(server, allowedOrigins);
+app.set('io', io);
+
+//Start server 
+server.listen(PORT, () => {
+  logger.success(`Server running on port ${PORT}`);
+});
+
+server.on("error", (err) => {
+  logger.error("Server failed to start", err);
+});
+
+
+//Graceful shutdown
+const shutdown = () => {
+    logger.info('Closing server...');
+    server.close(async () => {
+        try {
+            await mongoose.connection.close();
+            logger.warn('MongoDB closed');
+
+            process.exit(0);
+        } catch (err) {
+            logger.error('MongoDB close error: ', err);
+            process.exit(1);
+        }
+    });
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
