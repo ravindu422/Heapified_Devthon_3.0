@@ -6,7 +6,7 @@ const AdminHeader = () => {
 
     return (
         <header className='border-b border-gray-200 sticky top-0 z-20'>
-            <div className='flex items-center justify-between px-4 sm:px-6 lg:px-8 py-5 ml-16'>
+            <div className='flex items-center justify-between px-4 sm:px-6 lg:px-8 py-5 ml-10'>
                 <div className='flex items-center max-w-xs w-full'>
                     <div className='relative w-full'>
                         <input 
