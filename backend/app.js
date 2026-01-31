@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors'; 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import mongoose from 'mongoose';
+import alertRoutes from './routes/alertRoutes.js'
 
 const app = express();
 
@@ -32,6 +33,7 @@ app.get('/health', (req, res) => {
 });
 
 //Routes
+app.use('/api/alerts', alertRoutes);
 
 //Error Handling 
 app.use(notFound);
