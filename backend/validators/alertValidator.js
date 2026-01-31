@@ -20,7 +20,7 @@ export const createAlertValidation = [
         .withMessage('Severity level is required')
         .isIn(['Critical', 'High', 'Medium', 'Low']),
 
-    body('AffectedAreas')
+    body('affectedAreas')
         .trim()
         .notEmpty()
         .withMessage('Affected areas are required'),
