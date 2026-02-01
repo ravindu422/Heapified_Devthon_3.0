@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
 import Home from './pages/Home'
 import AlertManage from './pages/admin/AlertManage'
+import TaskManage from './pages/admin/TaskManage'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path='/' element={<Home />}/>
         <Route path='/alert-manage' element={<AlertManage/>}/>
+        <Route path='/task-manage' element={<TaskManage/>}/>
       </Routes>
     </BrowserRouter>
   )
