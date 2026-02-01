@@ -1,4 +1,3 @@
-import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import { intiSocket } from "./config/socket.js";
 import app from "./app.js";
@@ -6,10 +5,8 @@ import mongoose from "mongoose";
 import http from 'http';
 import { logger } from "./utils/logger.js";
 
-dotenv.config();
-
 const PORT = process.env.PORT;
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',')
+const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 const server = http.createServer(app);
 

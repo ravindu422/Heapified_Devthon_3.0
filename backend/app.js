@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
 import cors from 'cors'; 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -6,7 +9,7 @@ import alertRoutes from './routes/alertRoutes.js'
 
 const app = express();
 
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',');
+const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 app.use(cors({
     origin: allowedOrigins,
