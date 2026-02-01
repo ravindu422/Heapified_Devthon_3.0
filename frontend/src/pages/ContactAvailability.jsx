@@ -384,7 +384,7 @@ const ContactAvailability = () => {
                   value={formData.emergencyContactName}
                   onChange={handleInputChange}
                   placeholder="First"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
@@ -406,7 +406,7 @@ const ContactAvailability = () => {
                   value={formData.relationship}
                   onChange={handleInputChange}
                   placeholder="Parent / Husband / Wife"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
 
@@ -420,7 +420,7 @@ const ContactAvailability = () => {
                   value={formData.emergencyPhone}
                   onChange={handleInputChange}
                   placeholder="XXX XXXXXXX"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
               </div>
             </div>
