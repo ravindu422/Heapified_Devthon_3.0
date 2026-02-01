@@ -264,7 +264,7 @@ const VolunteerSignUp = () => {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between">
             <a
               href="/volunteer-dashboard"
               className="px-8 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors"
