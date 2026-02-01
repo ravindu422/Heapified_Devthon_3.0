@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import AlertManage from "./pages/admin/AlertManage";
 import VolunteerDashboard from "./components/dashboard/VolunteerDashboard";
 import VolunteerSignUp from "./pages/VolunteerSignUp";
+import ContactAvailability from "./pages/ContactAvailability";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
         <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
+        <Route path="/contact-availability" element={<ContactAvailability />} />
         <Route path="/alert-manage" element={<AlertManage />} />
       </Routes>
     </BrowserRouter>
