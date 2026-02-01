@@ -181,7 +181,12 @@ const VolunteerDashboard = () => {
           </h2>
           <p className="mt-6 text-xl text-left">
             New Volunteer?{" "}
-            <span className="underline cursor-pointer">Sign up here</span>
+            <a
+              href="/volunteer-signup"
+              className="underline cursor-pointer hover:text-teal-400 transition-colors"
+            >
+              Sign up here
+            </a>
           </p>
         </div>
       </div>
