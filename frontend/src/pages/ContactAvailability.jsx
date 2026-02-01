@@ -392,17 +392,19 @@ const ContactAvailability = () => {
                 <label className="block text-sm text-gray-700 mb-2">
                   Relationship
                 </label>
-                <input
-                  type="text"
-                  name="relationship"
-                  value={formData.relationship}
-                  onChange={handleInputChange}
-                  placeholder="Parent / Husband / Wife"
-                  className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-                <p className="text-red-500 text-sm mt-2">
-                  This will only be used in emergencies
-                </p>
+                <div className="flex items-center gap-6">
+                  <input
+                    type="text"
+                    name="relationship"
+                    value={formData.relationship}
+                    onChange={handleInputChange}
+                    placeholder="Parent / Husband / Wife"
+                    className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  <p className="text-red-500 text-sm whitespace-nowrap">
+                    This will only be used in emergencies
+                  </p>
+                </div>
               </div>
 
               <div>
