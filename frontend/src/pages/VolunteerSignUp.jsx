@@ -279,7 +279,7 @@ const VolunteerSignUp = () => {
         {/* Back to Home Button */}
         <div className="mt-6">
           <a
-            href="/"
+            href="/volunteer-dashboard"
             className="inline-block px-6 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors"
           >
             Back to Home
