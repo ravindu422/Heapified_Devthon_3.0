@@ -62,8 +62,6 @@ const VolunteerSignUp = () => {
 
         <nav className="mt-8">
           <div className="px-4 space-y-2">
-            <p className="text-sm text-gray-500 px-4 mb-2">Menu</p>
-
             <button
               onClick={() => setActiveTab("information")}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
@@ -128,7 +126,7 @@ const VolunteerSignUp = () => {
         </div>
 
         {/* Form Content */}
-        <div className="bg-white rounded-lg shadow p-8 max-w-3xl">
+        <div className="bg-white rounded-lg shadow p-8 max-w-7xl">
           {/* Upload Photo Section */}
           <div className="mb-8">
             <h2 className="text-xl font-bold text-gray-800 mb-6">
@@ -159,7 +157,7 @@ const VolunteerSignUp = () => {
                   <input
                     type="text"
                     placeholder="Take a photo"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
                 <div>
@@ -170,7 +168,7 @@ const VolunteerSignUp = () => {
                     type="file"
                     accept="image/*"
                     onChange={handlePhotoUpload}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                    className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
                   />
                 </div>
               </div>
@@ -182,14 +180,14 @@ const VolunteerSignUp = () => {
             <label className="block text-sm text-gray-700 mb-2">
               Full Name
             </label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-1">
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 placeholder="First"
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
               <input
                 type="text"
@@ -197,7 +195,7 @@ const VolunteerSignUp = () => {
                 value={formData.lastName}
                 onChange={handleInputChange}
                 placeholder="Last"
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+                className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
               />
             </div>
           </div>
@@ -273,12 +271,12 @@ const VolunteerSignUp = () => {
             >
               Back to Home
             </a>
-            <button
-              onClick={handleNext}
+            <a
+              href="/contact-availability"
               className="px-8 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
             >
               Next
-            </button>
+            </a>
           </div>
         </div>
       </main>
