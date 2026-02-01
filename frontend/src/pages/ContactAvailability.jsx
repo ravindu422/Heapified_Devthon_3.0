@@ -150,7 +150,10 @@ const ContactAvailability = () => {
               <span className="font-medium">Your Information</span>
             </a>
 
-            <button className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors bg-teal-500 text-white">
+            <a
+              href="/contact-availability"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors bg-teal-500 text-white"
+            >
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -165,7 +168,7 @@ const ContactAvailability = () => {
                 />
               </svg>
               <span className="font-medium">Contact & Availability</span>
-            </button>
+            </a>
 
             <a
               href="/volunteer-dashboard"
