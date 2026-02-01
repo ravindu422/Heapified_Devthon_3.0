@@ -1,0 +1,49 @@
+.auth-bg {
+  height: 100vh;
+  background: url("/flood.jpg") center/cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-card {
+  width: 380px;
+  padding: 36px;
+  border-radius: 24px;
+  backdrop-filter: blur(16px);
+  background: rgba(0, 0, 0, 0.55);
+  color: white;
+  box-shadow: 0 25px 45px rgba(0,0,0,0.4);
+}
+
+.auth-card h2 {
+  text-align: center;
+  margin-bottom: 4px;
+}
+
+.auth-card p {
+  text-align: center;
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.auth-card input {
+  width: 100%;
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+}
+
+.auth-card button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 999px;
+  background: #1dbbb4;
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
