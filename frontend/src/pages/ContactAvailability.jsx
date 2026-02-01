@@ -393,8 +393,10 @@ const ContactAvailability = () => {
                   This will only be used in emergencies
                 </p>
               </div>
+            </div>
 
-              <div>
+            <div className="max-w-2xl mt-6">
+              <div className="mb-6">
                 <label className="block text-sm text-gray-700 mb-2">
                   Relationship
                 </label>
