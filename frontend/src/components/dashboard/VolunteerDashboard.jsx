@@ -78,7 +78,7 @@ const VolunteerDashboard = () => {
                   <Bell size={20} />
                 </a>
                 <a
-                  href="#"
+                  href="/volunteer-signup"
                   className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
                 >
                   <User size={20} />
