@@ -100,6 +100,16 @@ const VolunteerSignUp = () => {
               <span className="font-medium">Contact & Availability</span>
             </button>
           </div>
+
+          {/* Back to Home Button */}
+          <div className="px-4 mt-6">
+            <a
+              href="/volunteer-dashboard"
+              className="flex items-center justify-center px-6 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors w-full"
+            >
+              Back to Home
+            </a>
+          </div>
         </nav>
       </aside>
 
@@ -274,16 +284,6 @@ const VolunteerSignUp = () => {
               Next
             </button>
           </div>
-        </div>
-
-        {/* Back to Home Button */}
-        <div className="mt-6">
-          <a
-            href="/volunteer-dashboard"
-            className="inline-block px-6 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors"
-          >
-            Back to Home
-          </a>
         </div>
       </main>
     </div>
