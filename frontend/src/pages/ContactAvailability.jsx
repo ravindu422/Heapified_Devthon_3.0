@@ -404,22 +404,17 @@ const ContactAvailability = () => {
           {/* Buttons */}
           <div className="flex items-center justify-between">
             <a
-              href="/volunteer-dashboard"
+              href="/volunteer-signup"
               className="px-8 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors"
             >
-              Back to Home
+              Preview
             </a>
-            <div className="flex gap-4">
-              <button className="px-8 py-2 border-2 border-teal-500 text-teal-500 rounded-lg hover:bg-teal-50 transition-colors">
-                Preview
-              </button>
               <button
                 onClick={handleSubmit}
                 className="px-8 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
               >
                 Submit
               </button>
-            </div>
           </div>
         </div>
       </main>
