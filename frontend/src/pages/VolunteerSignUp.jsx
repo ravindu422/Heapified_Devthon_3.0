@@ -62,25 +62,17 @@ const VolunteerSignUp = () => {
 
         <nav className="mt-8">
           <div className="px-4 space-y-2">
-            <button
-              onClick={() => setActiveTab("information")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                activeTab === "information"
-                  ? "bg-teal-500 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
+            <a
+              href="/volunteer-signup"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors bg-teal-500 text-white"
             >
               <User size={20} />
               <span className="font-medium">Your Information</span>
-            </button>
+            </a>
 
-            <button
-              onClick={() => setActiveTab("contact")}
-              className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
-                activeTab === "contact"
-                  ? "bg-teal-500 text-white"
-                  : "text-gray-700 hover:bg-gray-100"
-              }`}
+            <a
+              href="/contact-availability"
+              className="w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-gray-700 hover:bg-gray-100"
             >
               <svg
                 className="w-5 h-5"
@@ -96,7 +88,7 @@ const VolunteerSignUp = () => {
                 />
               </svg>
               <span className="font-medium">Contact & Availability</span>
-            </button>
+            </a>
 
             <a
               href="/volunteer-dashboard"
