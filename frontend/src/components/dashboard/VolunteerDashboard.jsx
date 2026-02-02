@@ -51,10 +51,10 @@ const VolunteerDashboard = () => {
                 Home
               </a>
               <a
-                href="#"
+                href="/quick-stats"
                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
               >
-                Quick stats
+                Quick Stats
               </a>
               <a
                 href="#"
@@ -144,7 +144,7 @@ const VolunteerDashboard = () => {
                 Home
               </a>
               <a
-                href="#"
+                href="/quick-stats"
                 className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
               >
                 Quick stats
