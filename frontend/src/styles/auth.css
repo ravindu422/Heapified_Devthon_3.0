@@ -78,3 +78,18 @@
   border: none;
   cursor: pointer;
 }
+.auth-link {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 13px;
+}
+
+.auth-link a {
+  color: #1dbbb4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
