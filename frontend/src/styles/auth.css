@@ -1,21 +1,47 @@
+/* ===== FULL SCREEN BACKGROUND ===== */
 .auth-bg {
   height: 100vh;
-  background: url("/flood.jpg") center/cover no-repeat;
+  width: 100vw;
+
+  background-image: url("/auth-bg.png"); /* your image */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
+  position: relative;
 }
 
+/* ===== DARK OVERLAY (LIKE YOUR MOCKUP) ===== */
+.auth-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(6px);
+  z-index: 1;
+}
+
+/* ===== LOGIN CARD ===== */
 .auth-card {
+  position: relative;
+  z-index: 2;
+
   width: 380px;
   padding: 36px;
   border-radius: 24px;
-  backdrop-filter: blur(16px);
+
   background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(16px);
+
   color: white;
   box-shadow: 0 25px 45px rgba(0,0,0,0.4);
 }
 
+/* ===== TEXT ===== */
 .auth-card h2 {
   text-align: center;
   margin-bottom: 4px;
@@ -27,23 +53,28 @@
   opacity: 0.8;
 }
 
+/* ===== INPUTS ===== */
 .auth-card input {
   width: 100%;
   margin-top: 14px;
   padding: 12px;
+
   border-radius: 10px;
   border: none;
   outline: none;
 }
 
+/* ===== BUTTON ===== */
 .auth-card button {
   width: 100%;
   margin-top: 20px;
   padding: 12px;
+
   border-radius: 999px;
   background: #1dbbb4;
   color: white;
   font-weight: bold;
+
   border: none;
   cursor: pointer;
 }
