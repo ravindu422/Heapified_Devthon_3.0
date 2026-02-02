@@ -12,6 +12,7 @@ import VolunteerSignUp from "./pages/VolunteerSignUp";
 import ContactAvailability from "./pages/ContactAvailability";
 import QuickStats from "./pages/QuickStats";
 import AvailableTasks from "./pages/AvailableTasks";
+import MyActiveTasks from "./pages/MyActiveTasks";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/contact-availability" element={<ContactAvailability />} />
         <Route path="/quick-stats" element={<QuickStats />} />
         <Route path="/available-tasks" element={<AvailableTasks />} />
+        <Route path="/my-active-tasks" element={<MyActiveTasks />} />
         <Route path="/alert-manage" element={<AlertManage />} />
       </Routes>
     </BrowserRouter>
