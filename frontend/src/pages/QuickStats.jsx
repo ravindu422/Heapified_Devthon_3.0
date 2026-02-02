@@ -34,7 +34,7 @@ const QuickStats = () => {
                 Quick stats
               </a>
               <a
-                href="#"
+                href="/available-tasks"
                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
               >
                 Available Tasks
