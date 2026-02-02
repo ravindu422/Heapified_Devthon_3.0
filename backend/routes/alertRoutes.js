@@ -1,12 +1,16 @@
 import express from 'express';
-import { createAlert, getRecentAlerts } from '../controllers/alertController.js';
-import { createAlertValidation, validate } from '../validators/alertValidator.js';
+import { createAlert, deleteAlert, getAlert, getAlertById, getRecentAlerts, updateAlert } from '../controllers/alertController.js';
+import { createAlertValidation, updateAlertValidation, validate } from '../validators/alertValidator.js';
 
 const router = express.Router();
 
+router.get('/', getAlert);
 router.get('/recent', getRecentAlerts);
+router.get('/:id', getAlertById);
 
 // Protected routes
-router.post('/', createAlertValidation, validate,createAlert);
+router.post('/', createAlertValidation, validate, createAlert);
+router.put('/:id', updateAlertValidation, validate, updateAlert);
+router.delete('/:id', deleteAlert);
 
 export default router;
