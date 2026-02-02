@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { Bell, User, MapPin, Phone } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AvailableTasks = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
+  const navigate = useNavigate();
 
   // Sample task data - will be replaced with backend data later
   const tasks = [
@@ -116,6 +120,23 @@ const AvailableTasks = () => {
     return priority.charAt(0).toUpperCase() + priority.slice(1) + " Priority";
   };
 
+  const handleAcceptTask = (task) => {
+    setSelectedTask(task);
+    setShowModal(true);
+  };
+
+  const handleConfirmAccept = () => {
+    // Here you would typically save the task to backend/local storage
+    console.log("Task accepted:", selectedTask);
+    setShowModal(false);
+    navigate("/my-active-tasks");
+  };
+
+  const handleCancelAccept = () => {
+    setShowModal(false);
+    setSelectedTask(null);
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Volunteer Dashboard Navbar */}
@@ -152,7 +173,7 @@ const AvailableTasks = () => {
                 Available Tasks
               </a>
               <a
-                href="#"
+                href="/my-active-tasks"
                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
               >
                 My Active Tasks
@@ -359,7 +380,10 @@ const AvailableTasks = () => {
                     </div>
 
                     {/* Accept Task Button */}
-                    <button className="w-full py-2 px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                    <button
+                      onClick={() => handleAcceptTask(task)}
+                      className="w-full py-2 px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                    >
                       Accept Task
                     </button>
                   </div>
@@ -368,6 +392,34 @@ const AvailableTasks = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4">
+              Confirm Task Acceptance
+            </h2>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to add this task to your active tasks?
+            </p>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={handleCancelAccept}
+                className="flex-1 py-2 px-4 border-2 border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+              >
+                No
+              </button>
+              <button
+                onClick={handleConfirmAccept}
+                className="flex-1 py-2 px-4 bg-teal-500 text-white rounded-lg font-medium hover:bg-teal-600 transition-colors"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
