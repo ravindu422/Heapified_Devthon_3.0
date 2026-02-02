@@ -11,6 +11,7 @@ import VolunteerDashboard from "./components/dashboard/VolunteerDashboard";
 import VolunteerSignUp from "./pages/VolunteerSignUp";
 import ContactAvailability from "./pages/ContactAvailability";
 import QuickStats from "./pages/QuickStats";
+import AvailableTasks from "./pages/AvailableTasks";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
         <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
         <Route path="/contact-availability" element={<ContactAvailability />} />
         <Route path="/quick-stats" element={<QuickStats />} />
+        <Route path="/available-tasks" element={<AvailableTasks />} />
         <Route path="/alert-manage" element={<AlertManage />} />
       </Routes>
     </BrowserRouter>
