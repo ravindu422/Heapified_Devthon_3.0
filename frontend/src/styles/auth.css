@@ -123,3 +123,10 @@
     width: 420px;
   }
 }
+@media (max-height: 600px) {
+  .auth-bg {
+    align-items: flex-start;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+}
