@@ -118,3 +118,8 @@
     font-size: 14px;
   }
 }
+@media (max-width: 768px) {
+  .auth-card {
+    width: 420px;
+  }
+}
