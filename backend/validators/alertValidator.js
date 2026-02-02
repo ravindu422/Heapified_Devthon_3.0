@@ -32,6 +32,34 @@ export const createAlertValidation = [
         .withMessage('Remarks cannot be exceed 500 characters')
 ];
 
+export const updateAlertValidation = [
+    body('title')
+        .optional()
+        .trim()
+        .isLength({ max: 200 })
+        .withMessage('Titile cannot exceed 200 characters'),
+    
+    body('message')
+        .optional()
+        .trim()
+        .isLength({ max: 1000 })
+        .withMessage('Message cannot exceed 1000 characters'),
+
+    body('severityLevel')
+        .optional()
+        .isIn(['Critical', 'High', 'Medium', 'Low']),
+
+    body('affectedAreas')
+        .optional()
+        .trim(),
+
+    body('remarks')
+        .optional()
+        .trim()
+        .isLength({ max: 500 })
+        .withMessage('Remarks cannot be exceed 500 characters')
+];
+
 
 //Middleware to check validation results
 export const validate = (req, res, next) => {
