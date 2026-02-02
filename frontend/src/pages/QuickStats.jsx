@@ -40,7 +40,7 @@ const QuickStats = () => {
                 Available Tasks
               </a>
               <a
-                href="#"
+                href="/my-active-tasks"
                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
               >
                 My Active Tasks
