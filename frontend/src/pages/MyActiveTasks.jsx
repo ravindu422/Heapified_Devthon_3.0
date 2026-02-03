@@ -122,7 +122,7 @@ const MyActiveTasks = () => {
               </a>
 
               {/* Icons Section */}
-              <div className="flex items-center space-x-4 ml-4">
+              <div className="flex items-center space-x-6 xl:space-x-8">
                 <a
                   href="#"
                   className="hover:text-teal-400 transition-colors duration-200"
