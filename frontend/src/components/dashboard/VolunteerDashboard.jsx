@@ -16,6 +16,10 @@ const VolunteerDashboard = () => {
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // This will be replaced with actual user data from backend
+  // For now, check localStorage or use a placeholder
+  const username = localStorage.getItem("username") || null; // Will be null for new users
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -173,12 +177,28 @@ const VolunteerDashboard = () => {
       >
         <div className="absolute inset-0 bg-black/50"></div>
         <div className="relative h-full flex flex-col items-start justify-center text-white px-8 md:px-16 max-w-7xl">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-left">
-            Thank you for supporting
-          </h1>
-          <h2 className="text-4xl md:text-5xl font-bold text-left">
-            to the SafeLanka community
-          </h2>
+          {username ? (
+            <>
+              <h1 className="text-4xl md:text-5xl font-bold mb-4 text-left">
+                Welcome back, {username}
+              </h1>
+              <h2 className="text-3xl md:text-4xl font-bold mb-2 text-left">
+                Thank you for supporting
+              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-left">
+                to the SafeLanka community
+              </h2>
+            </>
+          ) : (
+            <>
+              <h1 className="text-5xl md:text-6xl font-bold mb-4 text-left">
+                Thank you for supporting
+              </h1>
+              <h2 className="text-4xl md:text-5xl font-bold text-left">
+                to the SafeLanka community
+              </h2>
+            </>
+          )}
           <p className="mt-6 text-xl text-left">
             New Volunteer?{" "}
             <a
