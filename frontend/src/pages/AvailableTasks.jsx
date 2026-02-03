@@ -130,45 +130,6 @@ const AvailableTasks = () => {
         "Secure shelter areas",
       ],
     },
-    {
-      id: 4,
-      priority: "low",
-      title: "Disaster Area Translation Support",
-      location: "Mahawa - Emergency Relief Camp",
-      contact: "+94 75 044 7872",
-      contactPerson: "Mr. P. Mohamed",
-      expectedSupport: [
-        "Provide translation",
-        "Assist communication with victims",
-        "Help coordination injury information",
-      ],
-    },
-    {
-      id: 5,
-      priority: "medium",
-      title: "Mobile Medical Camp Support",
-      location: "Dullewa - Flood Affected Area",
-      contact: "+94 72 104 4491",
-      contactPerson: "Dr. S. Jayasinghe",
-      expectedSupport: [
-        "Triage patients",
-        "Medical documentation",
-        "Support vaccinations & checkups",
-      ],
-    },
-    {
-      id: 6,
-      priority: "medium",
-      title: "Relief Supply Logistics Coordination",
-      location: "Nikaweratiya - Distribution Center",
-      contact: "+94 77 452 2399",
-      contactPerson: "Mr. K. Nalulathra",
-      expectedSupport: [
-        "Manage incoming supplies",
-        "Coordinate transport schedules",
-        "Update stock records",
-      ],
-    },
   ];
 
   const getPriorityColor = (priority) => {
