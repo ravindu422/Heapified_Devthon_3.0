@@ -1,70 +1,43 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthCard from "../components/AuthCard";
-import { register } from "../services/authService";
+import { login } from "../services/authService";
 
-export default function Register() {
-  const [form, setForm] = useState({
-    fullName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
+export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleRegister = async () => {
-    if (form.password !== form.confirmPassword) {
-      alert("Passwords do not match");
-      return;
-    }
-
+  const handleLogin = async () => {
     try {
-      await register({
-        fullName: form.fullName,
-        email: form.email,
-        password: form.password,
-      });
+      await login({ email, password });
 
-      // ✅ Registration success → go to login
-      navigate("/login");
+      // ✅ Login success → go to Home
+      navigate("/home");
     } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      alert(err.response?.data?.message || "Invalid credentials");
     }
   };
 
   return (
-    <AuthCard title="Welcome SafeLanka" subtitle="Create your account">
-
-      <input
-        placeholder="Full Name"
-        onChange={e => setForm({ ...form, fullName: e.target.value })}
-      />
+    <AuthCard title="Welcome Back" subtitle="Please enter your details">
 
       <input
         placeholder="Email"
-        onChange={e => setForm({ ...form, email: e.target.value })}
+        onChange={e => setEmail(e.target.value)}
       />
 
       <input
         type="password"
         placeholder="Password"
-        onChange={e => setForm({ ...form, password: e.target.value })}
+        onChange={e => setPassword(e.target.value)}
       />
 
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        onChange={e =>
-          setForm({ ...form, confirmPassword: e.target.value })
-        }
-      />
-
-      <button onClick={handleRegister}>Register</button>
+      <button onClick={handleLogin}>Login</button>
 
       <p className="auth-link">
-        Already have an account?{" "}
-        <Link to="/login">Login here</Link>
+        Don’t have an account?{" "}
+        <Link to="/register">Register here</Link>
       </p>
     </AuthCard>
   );
