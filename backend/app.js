@@ -1,74 +1,49 @@
-import express from "express";
-import cors from "cors";
-import mongoose from "mongoose";
-import { errorHandler, notFound } from "./middleware/errorHandler.js";
-import alertRoutes from "./routes/alertRoutes.js";
+import dotenv from 'dotenv';
+dotenv.config();
+
+import express from 'express';
+import cors from 'cors';
+import mongoose from 'mongoose';
+
+import authRoutes from './routes/auth.routes.js';
+import alertRoutes from './routes/alertRoutes.js';
+import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
 
-/* ======================================================
-   CORS CONFIGURATION (FIXED & ROBUST)
-   ====================================================== */
-
-// Read allowed origins from .env
-const allowedOrigins = process.env.ALLOWED_ORIGINS
-  ? process.env.ALLOWED_ORIGINS.split(",")
-  : [];
+const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (Postman, curl, server-to-server)
-      if (!origin) return callback(null, true);
-
-      if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS blocked for origin: ${origin}`));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
   })
 );
 
-// Explicit preflight support (VERY IMPORTANT)
-app.options("*", cors());
-
-/* ======================================================
-   BODY PARSERS
-   ====================================================== */
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-/* ======================================================
-   HEALTH & ROOT ROUTES
-   ====================================================== */
-app.get("/", (req, res) => {
+// Health routes
+app.get('/', (req, res) => {
   res.json({
-    message: "SafeLanka API Server",
-    status: "Running"
+    message: 'SafeLanka API Server',
+    status: 'Running',
   });
 });
 
-app.get("/health", (req, res) => {
+app.get('/health', (req, res) => {
   res.json({
-    status: "OK",
-    database:
-      mongoose.connection.readyState === 1 ? "Connected" : "Disconnected",
-    uptime: process.uptime()
+    status: 'OK',
+    database: mongoose.connection.readyState === 1 ? 'Connected' : 'Disconnected',
+    uptime: process.uptime(),
   });
 });
 
-/* ======================================================
-   API ROUTES
-   ====================================================== */
+// Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/alerts', alertRoutes);
 
-/* ======================================================
-   ERROR HANDLING
-   ====================================================== */
+// Error handling (must be last)
 app.use(notFound);
 app.use(errorHandler);
 
