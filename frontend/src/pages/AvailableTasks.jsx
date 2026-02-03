@@ -267,13 +267,11 @@ const AvailableTasks = () => {
               <div className="flex items-center space-x-6 xl:space-x-8">
                 <div className="relative">
                   <button
-                    onClick={() => setShowNotifications(!showNotifications)}
-                    className="hover:text-teal-400 transition-colors duration-200 relative"
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
                   >
-                    <Bell size={20} />
-                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
-                      {importantNotifications.length + moreNotifications.length}
-                    </span>
+                    <User size={20} />
+                    <span className="text-sm xl:text-base">{username}</span>
                   </button>
 
                   {showNotifications && (
@@ -373,14 +371,16 @@ const AvailableTasks = () => {
                 </div>
                 <div className="relative">
                   <button
-                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
-                    className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
+                    onClick={() => setShowNotifications(!showNotifications)}
+                    className="hover:text-teal-400 transition-colors duration-200 relative"
                   >
-                    <User size={20} />
-                    <span className="text-sm xl:text-base">{username}</span>
+                    <Bell size={20} />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
+                      {importantNotifications.length + moreNotifications.length}
+                    </span>
                   </button>
 
-                  {showProfileDropdown && (
+                  {showNotifications && (
                     <div
                       ref={dropdownRef}
                       className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 py-4"
