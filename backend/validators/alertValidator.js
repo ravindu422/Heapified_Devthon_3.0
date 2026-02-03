@@ -6,7 +6,7 @@ export const createAlertValidation = [
         .notEmpty()
         .withMessage('Alert title is required')
         .isLength({ max: 200 })
-        .withMessage('Titile cannot exceed 200 characters'),
+        .withMessage('Title cannot exceed 200 characters'),
     
     body('message')
         .trim()
@@ -21,9 +21,42 @@ export const createAlertValidation = [
         .isIn(['Critical', 'High', 'Medium', 'Low']),
 
     body('affectedAreas')
+        .isArray({ min: 1 })
+        .withMessage('At least one affected area is required'),
+
+    body('affectedAreas.*.name')
         .trim()
         .notEmpty()
-        .withMessage('Affected areas are required'),
+        .withMessage('Area name is required'),
+    
+    body('affectedAreas.*.displayName')
+        .optional()
+        .trim(),
+    
+    body('affectedAreas.*.geometry')
+        .notEmpty()
+        .withMessage('Area geometry is required'),
+    
+    body('affectedAreas.*.geometry.type')
+        .isIn(['Point', 'Polygon', 'MultiPolygon', 'LineString'])
+        .withMessage('Invalid geometry type'),
+    
+    body('affectedAreas.*.geometry.coordinates')
+        .notEmpty()
+        .withMessage('Geometry coordinates are required'),
+    
+    body('affectedAreas.*.coordinates.latitude')
+        .isFloat({ min: -90, max: 90 })
+        .withMessage('Invalid latitude'),
+    
+    body('affectedAreas.*.coordinates.longitude')
+        .isFloat({ min: -180, max: 180 })
+        .withMessage('Invalid longitude'),
+    
+    body('affectedAreas.*.boundingBox')
+        .optional()
+        .isArray()
+        .withMessage('Bounding box must be an array'),
     
     body('remarks')
         .optional()       
@@ -57,7 +90,7 @@ export const updateAlertValidation = [
         .optional()
         .trim()
         .isLength({ max: 500 })
-        .withMessage('Remarks cannot be exceed 500 characters')
+        .withMessage('Remarks cannot exceed 500 characters')
 ];
 
 
@@ -70,7 +103,7 @@ export const validate = (req, res, next) => {
             success: false,
             message: 'Validation failed',
             errors: errors.array().map(err => ({
-                field: err.path,
+                field: err.path || err.param,
                 message: err.msg
             }))
         });
