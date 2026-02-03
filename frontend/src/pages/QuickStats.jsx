@@ -1,8 +1,92 @@
-import React, { useState } from "react";
-import { Bell, User, CheckCircle, Clock, Star } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { Bell, User, CheckCircle, Clock, Star, MapPin } from "lucide-react";
 
 const QuickStats = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  const dropdownRef = useRef(null);
+  const notificationRef = useRef(null);
+
+  const username = localStorage.getItem("username") || "Unknown user";
+  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
+
+  // Dummy notification data
+  const importantNotifications = [
+    {
+      id: 1,
+      title:
+        "Flood Relief Medical Assistance - Location: Kurunegala - Lake Round",
+      support: [
+        "First aid treatment",
+        "Basic medicines",
+        "Patient triage support",
+      ],
+      updated: "2 Min ago",
+    },
+    {
+      id: 2,
+      title: "Flood Evacuation Transport - Wahara - Lowland Zone",
+      support: [
+        "Drive evacuation vehicles",
+        "Transport affected families",
+        "Assist elderly and children",
+        "Coordinate evacuation routes",
+      ],
+      updated: "30 Min ago",
+    },
+  ];
+
+  const moreNotifications = [
+    {
+      id: 3,
+      title: "Temporary Shelter Setup - Mathawa- School Grounds",
+      support: [
+        "Set up tents",
+        "Build temporary partitions",
+        "Secure shelter areas",
+      ],
+      updated: "1 hour ago",
+    },
+    {
+      id: 4,
+      title: "Disaster Area Translation Support - Kuriyampola - Relief Camp",
+      support: [
+        "Translate instructions",
+        "Assist communication with victims",
+        "Help coordinators relay information",
+      ],
+      updated: "2 hour ago",
+    },
+  ];
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    }
+
+    if (showProfileDropdown || showNotifications) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfileDropdown, showNotifications]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("username");
+    localStorage.removeItem("userEmail");
+    window.location.href = "/";
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -48,19 +132,172 @@ const QuickStats = () => {
 
               {/* Icons Section */}
               <div className="flex items-center space-x-6 xl:space-x-8">
-                <a
-                  href="#"
-                  className="hover:text-teal-400 transition-colors duration-200"
-                >
-                  <Bell size={20} />
-                </a>
-                <a
-                  href="/volunteer-signup"
-                  className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
-                >
-                  <User size={20} />
-                  <span className="text-sm xl:text-base">Unknown user</span>
-                </a>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowNotifications(!showNotifications)}
+                    className="hover:text-teal-400 transition-colors duration-200 relative"
+                  >
+                    <Bell size={20} />
+                    <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
+                      {importantNotifications.length + moreNotifications.length}
+                    </span>
+                  </button>
+
+                  {showNotifications && (
+                    <div
+                      ref={notificationRef}
+                      className="absolute right-0 mt-2 w-[400px] bg-white rounded-lg shadow-xl z-50 max-h-[600px] overflow-y-auto"
+                    >
+                      <button
+                        onClick={() => setShowNotifications(false)}
+                        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 z-10"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+
+                      <div className="p-4 border-b border-gray-200">
+                        <p className="text-sm text-gray-700">
+                          Get notified when a new task matches your skills and
+                          location
+                        </p>
+                      </div>
+
+                      <div className="p-4">
+                        <h3 className="font-bold text-gray-900 mb-3">
+                          Important
+                        </h3>
+                        <div className="space-y-3">
+                          {importantNotifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className="border-2 border-blue-300 bg-blue-50 rounded-lg p-4"
+                            >
+                              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                {notification.title}
+                              </h4>
+                              <div className="mb-2">
+                                <p className="text-xs text-gray-700 font-medium">
+                                  Expected Support:
+                                </p>
+                                <ul className="text-xs text-gray-600 mt-1 space-y-0.5">
+                                  {notification.support.map((item, index) => (
+                                    <li key={index}>• {item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <p className="text-xs text-gray-500">
+                                Updated {notification.updated}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="p-4 pt-0">
+                        <h3 className="font-bold text-gray-900 mb-3">
+                          More notifications
+                        </h3>
+                        <div className="space-y-3">
+                          {moreNotifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className="border border-gray-300 bg-gray-50 rounded-lg p-4"
+                            >
+                              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                                {notification.title}
+                              </h4>
+                              <div className="mb-2">
+                                <p className="text-xs text-gray-700 font-medium">
+                                  Expected Support:
+                                </p>
+                                <ul className="text-xs text-gray-600 mt-1 space-y-0.5">
+                                  {notification.support.map((item, index) => (
+                                    <li key={index}>• {item}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <p className="text-xs text-gray-500">
+                                Updated {notification.updated}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
+                  >
+                    <User size={20} />
+                    <span className="text-sm xl:text-base">{username}</span>
+                  </button>
+
+                  {showProfileDropdown && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 py-4"
+                    >
+                      <button
+                        onClick={() => setShowProfileDropdown(false)}
+                        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+
+                      <div className="flex flex-col items-center mb-4">
+                        <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mb-3">
+                          <User size={32} className="text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          Hi, {username}!
+                        </h3>
+                        <p className="text-sm text-gray-600">{userEmail}</p>
+                      </div>
+
+                      <div className="px-4 space-y-2">
+                        <a
+                          href="/volunteer-signup"
+                          className="block w-full py-2 px-4 text-center bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                        >
+                          Your profile
+                        </a>
+                        <button
+                          onClick={handleSignOut}
+                          className="block w-full py-2 px-4 text-center bg-gray-200 text-red-600 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
