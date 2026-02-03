@@ -65,6 +65,8 @@ const alertSchema = new mongoose.Schema({
 
 alertSchema.index({ createAt: -1 });
 alertSchema.index({ severityLevel: 1 });
+alertSchema.index({ 'affectedAreas.centerPoint': '2dsphere' });
+alertSchema.index({ 'affectedAreas.geometry': '2dsphere' });
 
 alertSchema.virtual('timeAgo').get(function() {
     const now = new Date();
