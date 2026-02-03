@@ -276,7 +276,9 @@ const MyActiveTasks = () => {
                   >
                     <Bell size={20} />
                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
-                      {importantNotifications.length + moreNotifications.length}
+                      {importantNotifications.filter(
+                        (n) => !readNotifications.includes(n.id),
+                      ).length + moreNotifications.length}
                     </span>
                   </button>
 
