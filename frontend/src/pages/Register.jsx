@@ -25,7 +25,7 @@ export default function Register() {
         email: form.email,
         password: form.password,
       });
-      navigate("/dashboard");
+      navigate("/Home");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     }

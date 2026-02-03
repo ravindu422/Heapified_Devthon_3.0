@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthCard from "../components/AuthCard";
 import { login } from "../services/authService";
 
+
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
