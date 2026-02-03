@@ -101,7 +101,7 @@ const MyActiveTasks = () => {
         "Providing basic medical care and first aid to people affected by flooding. Supporting doctors, treating minor injuries, and helping manage patients at the relief site",
       status: "available",
       date: "13.01.2026",
-      statusColor: "yellow",
+      priorityColor: "yellow",
     },
     {
       id: 2,
@@ -110,7 +110,7 @@ const MyActiveTasks = () => {
         "Assisting in setting up temporary shelters for displaced families. Helping with tents, basic structures, and ensuring safe and organized shelter spaces",
       status: "active",
       date: "10.01.2026",
-      statusColor: "red",
+      priorityColor: "red",
     },
     {
       id: 3,
@@ -119,7 +119,7 @@ const MyActiveTasks = () => {
         "Assisted in packing, sorting, and distributing food supplies for affected families. Helped ensure food items were prepared efficiently and delivered in an organized and timely manner",
       status: "completed",
       date: "14.12.2025",
-      statusColor: "red",
+      priorityColor: "red",
     },
     {
       id: 4,
@@ -128,7 +128,7 @@ const MyActiveTasks = () => {
         "Supported the coordination and tracking of relief supplies at a distribution center. Helped organize incoming resources, update stock records, and assist with dispatching supplies to affected areas",
       status: "completed",
       date: "02.12.2025",
-      statusColor: "green",
+      priorityColor: "green",
     },
   ]);
 
@@ -155,7 +155,7 @@ const MyActiveTasks = () => {
           ? {
               ...task,
               status: newStatus,
-              statusColor: newStatus === "active" ? "red" : "green",
+
               date: formattedDate,
             }
           : task,
@@ -194,8 +194,8 @@ const MyActiveTasks = () => {
     }
   };
 
-  const getDotColor = (statusColor) => {
-    switch (statusColor) {
+  const getDotColor = (priorityColor) => {
+    switch (priorityColor) {
       case "yellow":
         return "bg-yellow-500";
       case "green":
@@ -549,7 +549,7 @@ const MyActiveTasks = () => {
                   <div className="col-span-6">
                     <div className="flex items-start gap-3">
                       <div
-                        className={`w-3 h-3 rounded-full ${getDotColor(task.statusColor)} mt-1 flex-shrink-0`}
+                        className={`w-3 h-3 rounded-full ${getDotColor(task.priorityColor)} mt-1 flex-shrink-0`}
                       ></div>
                       <div>
                         <h3 className="font-semibold text-gray-900 mb-2">
