@@ -5,7 +5,6 @@ import { register } from "../services/authService";
 
 export default function Register() {
   const [form, setForm] = useState({
-    fullName: "",
     email: "",
     password: "",
     confirmPassword: "",
@@ -21,47 +20,55 @@ export default function Register() {
 
     try {
       await register({
-        fullName: form.fullName,
+        fullName: "SafeLanka User",
         email: form.email,
         password: form.password,
       });
-      navigate("/Home");
-    } catch (err) {
-      alert(err.response?.data?.message || "Registration failed");
+      navigate("/dashboard");
+    } catch {
+      alert("Registration failed");
     }
   };
 
   return (
-    <AuthCard title="Welcome SafeLanka" subtitle="Please Enter Your Details">
+    <AuthCard
+      title="Welcome SafeLanka"
+      subtitle="Please Enter Your Details"
+    >
+      <div className="input-group">
+        <span>📧</span>
+        <input
+          placeholder="Email"
+          onChange={e => setForm({ ...form, email: e.target.value })}
+        />
+      </div>
 
-      <input
-        placeholder="Full Name"
-        onChange={e => setForm({ ...form, fullName: e.target.value })}
-      />
+      <div className="input-group">
+        <span>🔒</span>
+        <input
+          type="password"
+          placeholder="Password"
+          onChange={e => setForm({ ...form, password: e.target.value })}
+        />
+      </div>
 
-      <input
-        placeholder="Email"
-        onChange={e => setForm({ ...form, email: e.target.value })}
-      />
-
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setForm({ ...form, password: e.target.value })}
-      />
-
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        onChange={e => setForm({ ...form, confirmPassword: e.target.value })}
-      />
+      <div className="input-group">
+        <span>🔒</span>
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          onChange={e =>
+            setForm({ ...form, confirmPassword: e.target.value })
+          }
+        />
+      </div>
 
       <button onClick={handleRegister}>Register Here</button>
 
       <p className="auth-link">
-        Already have an account? <Link to="/login">Sign in here</Link>
+        Already Have an Account?{" "}
+        <Link to="/login">Login Here</Link>
       </p>
-
     </AuthCard>
   );
 }
