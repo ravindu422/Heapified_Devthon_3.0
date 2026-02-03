@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/auth";
+// Match backend PORT
+const API = "http://localhost:5080/api/auth";
 
 export const login = (data) =>
   axios.post(`${API}/login`, data);
