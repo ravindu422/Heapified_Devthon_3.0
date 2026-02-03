@@ -5,6 +5,7 @@ const QuickStats = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [readNotifications, setReadNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
 
@@ -93,6 +94,15 @@ const QuickStats = () => {
     completedTasks: 2,
     hoursContributed: 16,
     impactScore: 24,
+  };
+
+  const handleNotificationClick = (notificationId) => {
+    // Mark notification as read
+    if (!readNotifications.includes(notificationId)) {
+      setReadNotifications([...readNotifications, notificationId]);
+    }
+    // Navigate to Available Tasks
+    window.location.href = "/available-tasks";
   };
 
   return (
@@ -189,7 +199,14 @@ const QuickStats = () => {
                           {importantNotifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className="border-2 border-blue-300 bg-blue-50 rounded-lg p-4"
+                              onClick={() =>
+                                handleNotificationClick(notification.id)
+                              }
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
+                                readNotifications.includes(notification.id)
+                                  ? "border border-gray-300 bg-gray-50"
+                                  : "border-2 border-blue-300 bg-blue-50"
+                              }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
