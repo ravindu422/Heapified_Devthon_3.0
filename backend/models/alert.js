@@ -18,11 +18,37 @@ const alertSchema = new mongoose.Schema({
         enum: ['Critical', 'High', 'Medium', 'Low'],
         required: [true, 'Serverity level is required']
     },
-    affectedAreas: {
-        type: String,
-        required: [true, 'Affected areas are required'],
-        trim: true
-    },
+    affectedAreas: [{
+        name: {
+            type: String,
+            required: [true, 'Affected areas are required'],
+            trim: true
+        },
+        displauName: String,
+        geometry: {
+            type: {
+                type: String,
+                enum: ['Point', 'Polygon', 'Multipolygon', 'LineString'],
+                required: true
+            }, 
+            coordinates: {
+                type: mongoose.Schema.Types.Mixed,
+                required: true
+            }
+        },
+        centerPoint: {
+            type: {
+                type: String,
+                enum: ['Point'],
+                default: 'Point'
+            },
+            coordinates: {
+                type: [Number],
+                required: true
+            }
+        },
+        boundingBox: [Number]
+    }],
     remarks: {
         type: String,
         trim: true,
