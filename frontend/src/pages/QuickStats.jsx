@@ -88,6 +88,33 @@ const QuickStats = () => {
     window.location.href = "/";
   };
 
+  // Calculate stats from tasks stored in localStorage
+  const calculateStats = () => {
+    const tasksData = localStorage.getItem("activeTasks");
+    if (!tasksData) {
+      return { completedTasks: 0, hoursContributed: 0, impactScore: 0 };
+    }
+
+    const tasks = JSON.parse(tasksData);
+    const completedTasks = tasks.filter(
+      (task) => task.status === "completed",
+    ).length;
+
+    // Dummy calculation: 3 hours per completed task, 5 hours per active task
+    const hoursContributed =
+      tasks.filter((task) => task.status === "completed").length * 3 +
+      tasks.filter((task) => task.status === "active").length * 5;
+
+    // Dummy calculation: Impact score = completedTasks * 10 + activeHours * 2
+    const impactScore =
+      tasks.filter((task) => task.status === "completed").length * 10 +
+      tasks.filter((task) => task.status === "active").length * 2;
+
+    return { completedTasks, hoursContributed, impactScore };
+  };
+
+  const stats = calculateStats();
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Volunteer Dashboard Navbar */}
@@ -401,7 +428,9 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-gray-400">-</p>
+                <p className="text-4xl font-bold text-teal-600">
+                  {stats.completedTasks}
+                </p>
               </div>
             </div>
 
@@ -416,7 +445,9 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-gray-400">-</p>
+                <p className="text-4xl font-bold text-teal-600">
+                  {stats.hoursContributed}h
+                </p>
               </div>
             </div>
           </div>
@@ -433,7 +464,9 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-gray-400">-</p>
+                <p className="text-4xl font-bold text-teal-600">
+                  {stats.impactScore}
+                </p>
               </div>
             </div>
           </div>
