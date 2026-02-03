@@ -92,45 +92,54 @@ const MyActiveTasks = () => {
     window.location.href = "/";
   };
 
+  // Load tasks from localStorage or use default data
+  const loadTasksFromStorage = () => {
+    const storedTasks = localStorage.getItem("activeTasks");
+    if (storedTasks) {
+      return JSON.parse(storedTasks);
+    }
+    return [
+      {
+        id: 1,
+        title: "Flood Relief Medical Assistance",
+        description:
+          "Providing basic medical care and first aid to people affected by flooding. Supporting doctors, treating minor injuries, and helping manage patients at the relief site",
+        status: "available",
+        date: "13.01.2026",
+        priorityColor: "yellow",
+      },
+      {
+        id: 2,
+        title: "Temporary Shelter Setup",
+        description:
+          "Assisting in setting up temporary shelters for displaced families. Helping with tents, basic structures, and ensuring safe and organized shelter spaces",
+        status: "active",
+        date: "10.01.2026",
+        priorityColor: "red",
+      },
+      {
+        id: 3,
+        title: "Emergency Food Packing & Distribution Support",
+        description:
+          "Assisted in packing, sorting, and distributing food supplies for affected families. Helped ensure food items were prepared efficiently and delivered in an organized and timely manner",
+        status: "completed",
+        date: "14.12.2025",
+        priorityColor: "red",
+      },
+      {
+        id: 4,
+        title: "Relief Supply Logistics Coordination",
+        description:
+          "Supported the coordination and tracking of relief supplies at a distribution center. Helped organize incoming resources, update stock records, and assist with dispatching supplies to affected areas",
+        status: "completed",
+        date: "02.12.2025",
+        priorityColor: "green",
+      },
+    ];
+  };
+
   // Sample active tasks data - will be replaced with backend data later
-  const [activeTasks, setActiveTasks] = useState([
-    {
-      id: 1,
-      title: "Flood Relief Medical Assistance",
-      description:
-        "Providing basic medical care and first aid to people affected by flooding. Supporting doctors, treating minor injuries, and helping manage patients at the relief site",
-      status: "available",
-      date: "13.01.2026",
-      priorityColor: "yellow",
-    },
-    {
-      id: 2,
-      title: "Temporary Shelter Setup",
-      description:
-        "Assisting in setting up temporary shelters for displaced families. Helping with tents, basic structures, and ensuring safe and organized shelter spaces",
-      status: "active",
-      date: "10.01.2026",
-      priorityColor: "red",
-    },
-    {
-      id: 3,
-      title: "Emergency Food Packing & Distribution Support",
-      description:
-        "Assisted in packing, sorting, and distributing food supplies for affected families. Helped ensure food items were prepared efficiently and delivered in an organized and timely manner",
-      status: "completed",
-      date: "14.12.2025",
-      priorityColor: "red",
-    },
-    {
-      id: 4,
-      title: "Relief Supply Logistics Coordination",
-      description:
-        "Supported the coordination and tracking of relief supplies at a distribution center. Helped organize incoming resources, update stock records, and assist with dispatching supplies to affected areas",
-      status: "completed",
-      date: "02.12.2025",
-      priorityColor: "green",
-    },
-  ]);
+  const [activeTasks, setActiveTasks] = useState(loadTasksFromStorage());
 
   const handleStatusClick = (taskId, currentStatus) => {
     if (currentStatus === "available") {
@@ -149,18 +158,19 @@ const MyActiveTasks = () => {
     const today = new Date();
     const formattedDate = `${String(today.getDate()).padStart(2, "0")}.${String(today.getMonth() + 1).padStart(2, "0")}.${today.getFullYear()}`;
 
-    setActiveTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === selectedTaskId
-          ? {
-              ...task,
-              status: newStatus,
-
-              date: formattedDate,
-            }
-          : task,
-      ),
+    const updatedTasks = activeTasks.map((task) =>
+      task.id === selectedTaskId
+        ? {
+            ...task,
+            status: newStatus,
+            date: formattedDate,
+          }
+        : task,
     );
+
+    setActiveTasks(updatedTasks);
+    localStorage.setItem("activeTasks", JSON.stringify(updatedTasks));
+
     setShowStatusModal(false);
     setSelectedTaskId(null);
     setNewStatus(null);
