@@ -88,32 +88,12 @@ const QuickStats = () => {
     window.location.href = "/";
   };
 
-  // Calculate stats from tasks stored in localStorage
-  const calculateStats = () => {
-    const tasksData = localStorage.getItem("activeTasks");
-    if (!tasksData) {
-      return { completedTasks: 0, hoursContributed: 0, impactScore: 0 };
-    }
-
-    const tasks = JSON.parse(tasksData);
-    const completedTasks = tasks.filter(
-      (task) => task.status === "completed",
-    ).length;
-
-    // Dummy calculation: 3 hours per completed task, 5 hours per active task
-    const hoursContributed =
-      tasks.filter((task) => task.status === "completed").length * 3 +
-      tasks.filter((task) => task.status === "active").length * 5;
-
-    // Dummy calculation: Impact score = completedTasks * 10 + activeHours * 2
-    const impactScore =
-      tasks.filter((task) => task.status === "completed").length * 10 +
-      tasks.filter((task) => task.status === "active").length * 2;
-
-    return { completedTasks, hoursContributed, impactScore };
+  // Dummy stats values - will reset on page refresh
+  const stats = {
+    completedTasks: 2,
+    hoursContributed: 16,
+    impactScore: 24,
   };
-
-  const stats = calculateStats();
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
