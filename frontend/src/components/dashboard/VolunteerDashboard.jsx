@@ -160,13 +160,13 @@ const VolunteerDashboard = () => {
               </a>
 
               {/* Icons Section */}
-              <div className="flex items-center space-x-7 ml-7">
+              <div className="flex items-center space-x-6 xl:space-x-8">
                 <div className="relative">
                   <button
                     onClick={() => setShowNotifications(!showNotifications)}
                     className="hover:text-teal-400 transition-colors duration-200 relative"
                   >
-                    <Bell size={25} />
+                    <Bell size={20} />
                     {/* Notification badge */}
                     <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">
                       {importantNotifications.length + moreNotifications.length}
