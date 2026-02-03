@@ -1,16 +1,6 @@
 import axios from 'axios';
-import { logger } from '../../../backend/utils/logger';
+import api from './api';
 
-const LOCAL_BACKEND = 'http://localhost:5080/api';
-
-const api = axios.create({
-    baseURL: import.meta.VITE_API_URL || LOCAL_BACKEND,
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true
-});
 
 const alertService = {
     getRecentAlerts: async (limit = 5) => {
