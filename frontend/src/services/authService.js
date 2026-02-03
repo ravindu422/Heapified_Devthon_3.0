@@ -1,10 +1,22 @@
-import axios from "axios";
+import api from "./api";
 
-// Match backend PORT
-const API = "http://localhost:5080/api/auth";
+export const login = async (data) => {
+  const res = await api.post("/auth/login", data);
+  localStorage.setItem("token", res.data.token);
+  return res.data;
+};
 
-export const login = (data) =>
-  axios.post(`${API}/login`, data);
+export const register = async (data) => {
+  const res = await api.post("/auth/register", data);
+  localStorage.setItem("token", res.data.token);
+  return res.data;
+};
 
-export const register = (data) =>
-  axios.post(`${API}/register`, data);
+export const getMe = async () => {
+  const res = await api.get("/auth/me");
+  return res.data;
+};
+
+export const logout = () => {
+  localStorage.removeItem("token");
+};
