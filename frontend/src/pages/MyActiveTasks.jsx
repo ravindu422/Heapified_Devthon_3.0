@@ -146,6 +146,9 @@ const MyActiveTasks = () => {
   };
 
   const confirmStatusChange = () => {
+    const today = new Date();
+    const formattedDate = `${String(today.getDate()).padStart(2, "0")}.${String(today.getMonth() + 1).padStart(2, "0")}.${today.getFullYear()}`;
+
     setActiveTasks((prevTasks) =>
       prevTasks.map((task) =>
         task.id === selectedTaskId
@@ -153,6 +156,7 @@ const MyActiveTasks = () => {
               ...task,
               status: newStatus,
               statusColor: newStatus === "active" ? "red" : "green",
+              date: formattedDate,
             }
           : task,
       ),
