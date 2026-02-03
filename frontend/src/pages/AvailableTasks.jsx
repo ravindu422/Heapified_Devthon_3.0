@@ -9,6 +9,7 @@ const AvailableTasks = () => {
   const [selectedTask, setSelectedTask] = useState(null);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [readNotifications, setReadNotifications] = useState([]);
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
   const navigate = useNavigate();
@@ -91,6 +92,15 @@ const AvailableTasks = () => {
     localStorage.removeItem("username");
     localStorage.removeItem("userEmail");
     window.location.href = "/";
+  };
+
+  const handleNotificationClick = (notificationId) => {
+    // Mark notification as read
+    if (!readNotifications.includes(notificationId)) {
+      setReadNotifications([...readNotifications, notificationId]);
+    }
+    // Close the notification dropdown
+    setShowNotifications(false);
   };
 
   // Sample task data - will be replaced with backend data later
@@ -276,7 +286,14 @@ const AvailableTasks = () => {
                           {importantNotifications.map((notification) => (
                             <div
                               key={notification.id}
-                              className="border-2 border-blue-300 bg-blue-50 rounded-lg p-4"
+                              onClick={() =>
+                                handleNotificationClick(notification.id)
+                              }
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
+                                readNotifications.includes(notification.id)
+                                  ? "border border-gray-300 bg-gray-50"
+                                  : "border-2 border-blue-300 bg-blue-50"
+                              }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
