@@ -18,7 +18,7 @@ export const createAlert = async (req, res) => {
                     area.coordinates.latitude
                 ]
             },
-            boundigBox: area.boundigBox
+            boundingBox: area.boundingBox
         }));
 
         const alert = await Alert.create({
