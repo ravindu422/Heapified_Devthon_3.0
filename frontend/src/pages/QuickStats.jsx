@@ -381,10 +381,10 @@ const QuickStats = () => {
       </nav>
 
       {/* Main Content */}
-      <div className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="flex-1 py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           {/* Page Title */}
-          <h1 className="text-2xl font-semibold text-gray-900 mb-12">
+          <h1 className="text-2xl font-semibold text-gray-900 mb-8 text-center">
             Summary of your volunteer contribution
           </h1>
 
