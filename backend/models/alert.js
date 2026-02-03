@@ -24,7 +24,7 @@ const alertSchema = new mongoose.Schema({
             required: [true, 'Affected areas are required'],
             trim: true
         },
-        displauName: String,
+        displayName: String,
         geometry: {
             type: {
                 type: String,
