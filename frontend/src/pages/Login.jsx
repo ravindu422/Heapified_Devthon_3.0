@@ -1,53 +1,70 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthCard from "../components/AuthCard";
-import { login } from "../services/authService";
+import { register } from "../services/authService";
 
-export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function Register() {
+  const [form, setForm] = useState({
+    fullName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
     try {
-      await login({ email, password });
-      navigate("/dashboard");
+      await register({
+        fullName: form.fullName,
+        email: form.email,
+        password: form.password,
+      });
+
+      // ✅ Registration success → go to login
+      navigate("/login");
     } catch (err) {
-      alert("Invalid credentials");
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
   return (
-    <AuthCard
-      title="Welcome Back"
-      subtitle="Please Enter Your Details"
-    >
-      <div className="input-group">
-        <span>📧</span>
-        <input
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-        />
-      </div>
+    <AuthCard title="Welcome SafeLanka" subtitle="Create your account">
 
-      <div className="input-group">
-        <span>🔒</span>
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-        />
-      </div>
+      <input
+        placeholder="Full Name"
+        onChange={e => setForm({ ...form, fullName: e.target.value })}
+      />
 
-      <button onClick={handleLogin}>Login</button>
+      <input
+        placeholder="Email"
+        onChange={e => setForm({ ...form, email: e.target.value })}
+      />
 
-      <p className="auth-link">Forgot Password?</p>
+      <input
+        type="password"
+        placeholder="Password"
+        onChange={e => setForm({ ...form, password: e.target.value })}
+      />
+
+      <input
+        type="password"
+        placeholder="Confirm Password"
+        onChange={e =>
+          setForm({ ...form, confirmPassword: e.target.value })
+        }
+      />
+
+      <button onClick={handleRegister}>Register</button>
 
       <p className="auth-link">
-        Don’t Have an Account?{" "}
-        <Link to="/register">Register Here</Link>
+        Already have an account?{" "}
+        <Link to="/login">Login here</Link>
       </p>
     </AuthCard>
   );
