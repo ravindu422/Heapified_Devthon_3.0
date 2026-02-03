@@ -7,8 +7,26 @@ export const createAlert = async (req, res) => {
     try {
         const { title, message, severityLevel, affectedAreas, remarks } = req.body;
 
+        const transformedAreas = affectedAreas.map(area => ({
+            name: area.name,
+            displayName: area.displayName,
+            geometry: area.geometry,
+            centerPoint: {
+                type: 'Point',
+                coordinates: [
+                    area.coordinates.longitude,
+                    area.coordinates.latitude
+                ]
+            },
+            boundigBox: area.boundigBox
+        }));
+
         const alert = await Alert.create({
-            title, message, severityLevel, affectedAreas, remarks: remarks || ''
+            title, 
+            message, 
+            severityLevel, 
+            affectedAreas: transformedAreas, 
+            remarks: remarks || ''
         });
 
         res.status(200).json({
