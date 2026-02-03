@@ -74,8 +74,10 @@ export const login = asyncHandler(async (req, res) => {
     throw new Error("email and password are required");
   }
 
-  // Find user
-  const user = await User.findOne({ email: email.toLowerCase() });
+  // Find user WITH passwordHash
+  const user = await User
+    .findOne({ email: email.toLowerCase() })
+    .select("+passwordHash");
 
   // Password check
   if (!user || !(await user.comparePassword(password))) {
@@ -96,6 +98,7 @@ export const login = asyncHandler(async (req, res) => {
     },
   });
 });
+
 
 /**
  * @route   GET /api/auth/me
