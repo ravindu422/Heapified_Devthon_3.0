@@ -9,7 +9,7 @@ import { logger } from "./utils/logger.js";
 dotenv.config();
 
 const PORT = process.env.PORT;
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',')
+const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',');
 
 const server = http.createServer(app);
 
