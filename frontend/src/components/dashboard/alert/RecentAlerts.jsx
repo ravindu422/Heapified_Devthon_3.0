@@ -18,6 +18,19 @@ const RecentAlerts = ({ alerts, onRefresh }) => {
     );
   };
 
+  const formatAffectedAreas = (areas) => {
+    if (!areas || areas.length === 0) return 'No areas specified';
+
+    const areaNames = areas.map(area => area.name || area.displayName).filter(Boolean);
+
+    if (areaNames.length === 0) return 'No areas specified';
+    if (areaNames.length === 1) return areaNames[0];
+    if (areaNames.length === 2) return areaNames.join(' and ');
+
+    const remaining = areaNames.length - 2;
+    return `${areaNames.slice(0, 2).join(', ')} and ${remaining} more`;
+  };
+
   return (
     <div className='bg-white p-6 h-fit sticky top-12'>
       <div className='flex items-center justify-between mb-6 mt-2'>
@@ -56,7 +69,7 @@ const RecentAlerts = ({ alerts, onRefresh }) => {
               </div>
               
               <p className='text-xs text-gray-600 mb-3 line-clamp-3 ml-4'>
-                Affected Areas: {alert.affectedAreas}
+                <span className='font-medium'>Affected Areas:</span> {formatAffectedAreas(alert.affectedAreas)}
               </p>
 
               <div className='flex justify-end'>
