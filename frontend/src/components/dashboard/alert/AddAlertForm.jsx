@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import LocationInput from './LocationInput';
 
 const AddAlertForm = ({ onSubmit, loading }) => {
     const [formData, setFormData] = useState({
         title: '',
         message: '',
         severityLevel: '',
-        affectedAreas: '',
+        affectedAreas: [],
         remarks: ''
     });
 
@@ -39,8 +40,8 @@ const AddAlertForm = ({ onSubmit, loading }) => {
                 break;
 
             case 'affectedAreas':
-                if (!value.trim()) {
-                    error = 'Affected areas are required';
+                if (!value || value.length === 0) {  
+                    error = 'At least one affected area is required';
                 }
                 break;
 
@@ -123,12 +124,27 @@ const AddAlertForm = ({ onSubmit, loading }) => {
                     title: '',
                     message: '',
                     severityLevel: '',
-                    affectedAreas: '',
+                    affectedAreas: [],
                     remarks: ''
                 });
                 setTouched({});
                 setErrors({});
             }
+        }
+    };
+
+    const handleLocationsChange = (locations) => {
+        setFormData(prev => ({
+            ...prev,
+            affectedAreas: locations
+        }));
+
+        if (touched.affectedAreas) {
+            const error = validateField('affectedAreas', locations);
+            setErrors(prev => ({
+                ...prev,
+                affectedAreas: error
+            }));
         }
     };
 
@@ -245,7 +261,7 @@ const AddAlertForm = ({ onSubmit, loading }) => {
                 </div>
 
                 {/* Affected Areas */}
-                <div className='relative'>
+                {/* <div className='relative'>
                     <input
                         type='text'
                         id='affectedAreas'
@@ -261,7 +277,12 @@ const AddAlertForm = ({ onSubmit, loading }) => {
                     {touched.affectedAreas && errors.affectedAreas && (
                         <p className='mt-1 ml-1 text-xs text-red-500'>{errors.affectedAreas}</p>
                     )}
-                </div>
+                </div> */}
+                <LocationInput
+                    selectedLocations={formData.affectedAreas}
+                    onLocationsChange={handleLocationsChange}
+                    error={touched.affectedAreas && errors.affectedAreas}
+                />
 
                 {/* Remarks (Optional) */}
                 <div className='relative'>
