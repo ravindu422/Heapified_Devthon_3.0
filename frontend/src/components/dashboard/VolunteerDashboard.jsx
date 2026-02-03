@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Bell, User } from "lucide-react";
 import Footer from "../common/Footer";
 
@@ -15,10 +15,39 @@ const VolunteerDashboard = () => {
     experience: "",
   });
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const dropdownRef = useRef(null);
 
   // This will be replaced with actual user data from backend
   // For now, check localStorage or use a placeholder
-  const username = localStorage.getItem("username") || null; // Will be null for new users
+  const username = localStorage.getItem("username") || "Unknown user";
+  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
+  const isReturningUser = !!localStorage.getItem("username");
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowProfileDropdown(false);
+      }
+    }
+
+    if (showProfileDropdown) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showProfileDropdown]);
+
+  const handleSignOut = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem("username");
+    localStorage.removeItem("userEmail");
+    // Redirect to home page
+    window.location.href = "/";
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -81,13 +110,70 @@ const VolunteerDashboard = () => {
                 >
                   <Bell size={20} />
                 </a>
-                <a
-                  href="/volunteer-signup"
-                  className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
-                >
-                  <User size={20} />
-                  <span className="text-sm xl:text-base">Unknown user</span>
-                </a>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileDropdown(!showProfileDropdown)}
+                    className="flex items-center space-x-2 hover:text-teal-400 transition-colors duration-200"
+                  >
+                    <User size={20} />
+                    <span className="text-sm xl:text-base">{username}</span>
+                  </button>
+
+                  {/* Profile Dropdown */}
+                  {showProfileDropdown && (
+                    <div
+                      ref={dropdownRef}
+                      className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl z-50 py-4"
+                    >
+                      {/* Close button */}
+                      <button
+                        onClick={() => setShowProfileDropdown(false)}
+                        className="absolute top-2 right-2 text-gray-400 hover:text-gray-600"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+
+                      {/* User Avatar */}
+                      <div className="flex flex-col items-center mb-4">
+                        <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center mb-3">
+                          <User size={32} className="text-white" />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900">
+                          Hi, {username}!
+                        </h3>
+                        <p className="text-sm text-gray-600">{userEmail}</p>
+                      </div>
+
+                      {/* Buttons */}
+                      <div className="px-4 space-y-2">
+                        <a
+                          href="/volunteer-signup"
+                          className="block w-full py-2 px-4 text-center bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                        >
+                          Your profile
+                        </a>
+                        <button
+                          onClick={handleSignOut}
+                          className="block w-full py-2 px-4 text-center bg-gray-200 text-red-600 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+                        >
+                          Sign Out
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
