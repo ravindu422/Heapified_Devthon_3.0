@@ -25,8 +25,6 @@ export default function Register() {
         email: form.email,
         password: form.password,
       });
-
-      // ✅ Registration success → go to login
       navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
@@ -36,29 +34,42 @@ export default function Register() {
   return (
     <AuthCard title="Welcome SafeLanka" subtitle="Create your account">
 
-      <input
-        placeholder="Full Name"
-        onChange={e => setForm({ ...form, fullName: e.target.value })}
-      />
+      <div className="input-group">
+        <input
+          placeholder="Full Name"
+          value={form.fullName}
+          onChange={e => setForm({ ...form, fullName: e.target.value })}
+        />
+      </div>
 
-      <input
-        placeholder="Email"
-        onChange={e => setForm({ ...form, email: e.target.value })}
-      />
+      <div className="input-group">
+        <input
+          type="email"
+          placeholder="Email"
+          value={form.email}
+          onChange={e => setForm({ ...form, email: e.target.value })}
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setForm({ ...form, password: e.target.value })}
-      />
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={e => setForm({ ...form, password: e.target.value })}
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Confirm Password"
-        onChange={e =>
-          setForm({ ...form, confirmPassword: e.target.value })
-        }
-      />
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={form.confirmPassword}
+          onChange={e =>
+            setForm({ ...form, confirmPassword: e.target.value })
+          }
+        />
+      </div>
 
       <button onClick={handleRegister}>Register</button>
 

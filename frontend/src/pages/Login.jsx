@@ -11,8 +11,6 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       await login({ email, password });
-
-      // ✅ Login success → go to Home
       navigate("/home");
     } catch (err) {
       alert(err.response?.data?.message || "Invalid credentials");
@@ -22,16 +20,23 @@ export default function Login() {
   return (
     <AuthCard title="Welcome Back" subtitle="Please enter your details">
 
-      <input
-        placeholder="Email"
-        onChange={e => setEmail(e.target.value)}
-      />
+      <div className="input-group">
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        onChange={e => setPassword(e.target.value)}
-      />
+      <div className="input-group">
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+      </div>
 
       <button onClick={handleLogin}>Login</button>
 
