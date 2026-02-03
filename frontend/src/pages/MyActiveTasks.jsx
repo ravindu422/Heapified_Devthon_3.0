@@ -6,6 +6,9 @@ const MyActiveTasks = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const [newStatus, setNewStatus] = useState(null);
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
 
@@ -90,7 +93,7 @@ const MyActiveTasks = () => {
   };
 
   // Sample active tasks data - will be replaced with backend data later
-  const activeTasks = [
+  const [activeTasks, setActiveTasks] = useState([
     {
       id: 1,
       title: "Flood Relief Medical Assistance",
@@ -127,7 +130,52 @@ const MyActiveTasks = () => {
       date: "02.12.2025",
       statusColor: "green",
     },
-  ];
+  ]);
+
+  const handleStatusClick = (taskId, currentStatus) => {
+    if (currentStatus === "available") {
+      setSelectedTaskId(taskId);
+      setNewStatus("active");
+      setShowStatusModal(true);
+    } else if (currentStatus === "active") {
+      setSelectedTaskId(taskId);
+      setNewStatus("completed");
+      setShowStatusModal(true);
+    }
+    // Completed tasks don't change status
+  };
+
+  const confirmStatusChange = () => {
+    setActiveTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === selectedTaskId
+          ? {
+              ...task,
+              status: newStatus,
+              statusColor: newStatus === "active" ? "red" : "green",
+            }
+          : task,
+      ),
+    );
+    setShowStatusModal(false);
+    setSelectedTaskId(null);
+    setNewStatus(null);
+  };
+
+  const cancelStatusChange = () => {
+    setShowStatusModal(false);
+    setSelectedTaskId(null);
+    setNewStatus(null);
+  };
+
+  const getModalMessage = () => {
+    if (newStatus === "active") {
+      return "Are you sure you are currently doing this task?";
+    } else if (newStatus === "completed") {
+      return "Are you complete this task?";
+    }
+    return "";
+  };
 
   const getStatusBadgeColor = (status) => {
     switch (status) {
@@ -512,11 +560,17 @@ const MyActiveTasks = () => {
 
                   {/* Status Column */}
                   <div className="col-span-3 flex items-center justify-center">
-                    <span
-                      className={`px-6 py-2 border-2 rounded-full text-sm font-medium ${getStatusBadgeColor(task.status)}`}
+                    <button
+                      onClick={() => handleStatusClick(task.id, task.status)}
+                      disabled={task.status === "completed"}
+                      className={`px-6 py-2 border-2 rounded-full text-sm font-medium ${getStatusBadgeColor(task.status)} ${
+                        task.status !== "completed"
+                          ? "cursor-pointer hover:opacity-80 transition-opacity"
+                          : "cursor-default"
+                      }`}
                     >
                       {getStatusLabel(task.status)}
-                    </span>
+                    </button>
                   </div>
 
                   {/* Date Column */}
@@ -529,6 +583,32 @@ const MyActiveTasks = () => {
           </div>
         </div>
       </div>
+
+      {/* Status Change Modal */}
+      {showStatusModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full mx-4 shadow-2xl">
+            <h3 className="text-xl font-semibold text-gray-900 mb-4">
+              Confirm Status Change
+            </h3>
+            <p className="text-gray-700 mb-6">{getModalMessage()}</p>
+            <div className="flex gap-4 justify-end">
+              <button
+                onClick={cancelStatusChange}
+                className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors font-medium"
+              >
+                No
+              </button>
+              <button
+                onClick={confirmStatusChange}
+                className="px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors font-medium"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
