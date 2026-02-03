@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Bell, User } from "lucide-react";
+import { Bell, User, MapPin } from "lucide-react";
 import Footer from "../common/Footer";
 
 const VolunteerDashboard = () => {
@@ -296,6 +296,93 @@ const VolunteerDashboard = () => {
           </p>
         </div>
       </div>
+
+      {/* Recent Notices Section - Only for registered users */}
+      {isReturningUser && (
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <h2 className="text-3xl font-bold text-gray-900 mb-8">
+            Recent Notices
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Notice Card 1 */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Flood Relief Medical Assistance
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 mb-3">
+                <MapPin size={16} className="mr-1" />
+                <span>Katugoda - Low level</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                  Medium Priority
+                </span>
+                <span className="text-xs text-gray-500">
+                  Updated 1 Min. ago
+                </span>
+              </div>
+            </div>
+
+            {/* Notice Card 2 */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Flood Evacuation Transport
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 mb-3">
+                <MapPin size={16} className="mr-1" />
+                <span>Moana - Lakand Dura</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+                  High Priority
+                </span>
+                <span className="text-xs text-gray-500">
+                  Updated 10 Min. ago
+                </span>
+              </div>
+            </div>
+
+            {/* Notice Card 3 */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Temporary Shelter Setup
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 mb-3">
+                <MapPin size={16} className="mr-1" />
+                <span>Unknown - Island, Durable</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  Low Priority
+                </span>
+                <span className="text-xs text-gray-500">
+                  Updated 17 Min. ago
+                </span>
+              </div>
+            </div>
+
+            {/* Notice Card 4 */}
+            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+                Disaster Area Translation Support
+              </h3>
+              <div className="flex items-center text-sm text-gray-600 mb-3">
+                <MapPin size={16} className="mr-1" />
+                <span>Evacuation - MARCH-Dowa</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                  Low Priority
+                </span>
+                <span className="text-xs text-gray-500">
+                  Updated 8 Min. ago
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
