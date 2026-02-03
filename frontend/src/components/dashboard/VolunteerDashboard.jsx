@@ -127,7 +127,7 @@ const VolunteerDashboard = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16 sm:h-20">
             <div className="shrink-0">
-              <a href="/" className="text-xl sm:text-2xl lg:text-3xl font-bold">
+              <a href="/volunteer-dashboard" className="text-xl sm:text-2xl lg:text-3xl font-bold">
                 Volunteer Dashboard
               </a>
             </div>
