@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowDown, ChevronDown, ClockFading, RefreshCw } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const RecentAlerts = ({ alerts, onRefresh }) => {
   const getSeverityColor = (level) => {
@@ -85,9 +86,10 @@ const RecentAlerts = ({ alerts, onRefresh }) => {
 
       {alerts.length > 0 && (
         <div className='flex justify-end mt-6 text-center mr-2'>
-          <button className='text-[12px] text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200'>
+          <Link to="/manage-alert"
+            className='text-[12px] text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200'>
             View All
-          </button>
+          </Link>
         </div>
       )}
     </div>
