@@ -1,7 +1,0 @@
-{
-  user: {
-    id,
-    email,
-    role
-  }
-}

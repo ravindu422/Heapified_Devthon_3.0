@@ -8,17 +8,18 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { setAuth } = useAuth(); // 🔑 from AuthContext
+  const { setAuth } = useAuth();
 
   const handleLogin = async () => {
     try {
       const res = await login({ email, password });
+      // res === res.data
 
-      // Save token + user globally
-      setAuth(res.data.token, res.data.user);
+      // ✅ FIX HERE
+      setAuth(res.token, res.user);
 
-      // 🔐 ROLE-BASED REDIRECT
-      if (res.data.user.role === "ADMIN") {
+      // ✅ FIX HERE
+      if (res.user.role === "ADMIN") {
         navigate("/alert-manage");
       } else {
         navigate("/");
@@ -51,8 +52,7 @@ export default function Login() {
       <button onClick={handleLogin}>Login</button>
 
       <p className="auth-link">
-        Don’t have an account?{" "}
-        <Link to="/register">Register here</Link>
+        Don’t have an account? <Link to="/register">Register here</Link>
       </p>
     </AuthCard>
   );
