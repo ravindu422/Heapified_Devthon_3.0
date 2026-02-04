@@ -4,7 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-
+import taskRoute from './routes/taskRoute.js';
 import authRoutes from './routes/auth.routes.js';
 import alertRoutes from './routes/alertRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -39,7 +39,8 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Routes
+//Routes
+app.use('/api/task',taskRoute)
 app.use('/api/auth', authRoutes);
 app.use('/api/alerts', alertRoutes);
 

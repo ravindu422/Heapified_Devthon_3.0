@@ -15,6 +15,7 @@ import ContactAvailability from "./pages/ContactAvailability";
 import QuickStats from "./pages/QuickStats";
 import AvailableTasks from "./pages/AvailableTasks";
 import MyActiveTasks from "./pages/MyActiveTasks";
+import TaskManage from './pages/admin/TaskManage';
 
 
 function App() {
@@ -43,6 +44,15 @@ function App() {
               <AlertManage />
             </ProtectedRoute>
           }
+        />
+
+        <Route 
+           path='/task-manage' 
+           element={
+             <ProtectedRoute roles={["ADMIN"]}>
+              <TaskManage/>
+            </ProtectedRoute>
+           }
         />
 
         {/* Unauthorized */}
