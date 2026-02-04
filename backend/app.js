@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors'; 
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 import mongoose from 'mongoose';
-
+import taskRoute from './routes/taskRoute.js';
 const app = express();
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',');
@@ -32,7 +32,7 @@ app.get('/health', (req, res) => {
 });
 
 //Routes
-
+app.use('/api/task',taskRoute)
 //Error Handling 
 app.use(notFound);
 app.use(errorHandler);
