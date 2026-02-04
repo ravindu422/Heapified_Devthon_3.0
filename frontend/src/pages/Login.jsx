@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       await login({ email, password });
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       alert(err.response?.data?.message || "Invalid credentials");
     }

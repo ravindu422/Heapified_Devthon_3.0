@@ -19,6 +19,13 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+
+    // 🔐 RBAC
+    role: {
+      type: String,
+      enum: ["USER", "ADMIN"],
+      default: "USER",
+    },
   },
   { timestamps: true }
 );
