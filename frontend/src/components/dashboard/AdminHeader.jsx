@@ -21,7 +21,7 @@ const AdminHeader = () => {
                     </div>
                 </div>
 
-                <div className='flex items-center gap-2'>
+                <div className='flex items-center gap-2 mr-11'>
                     <div className='flex items-center gap-2 sm:gap-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2 sm:px-3 py-2 transition-colors duration-200'>
                         <div className='w-8 h-8 sm:w-10 sm:h-10 bg-teal-600/75 rounded-full flex items-center justify-center text-white font-semibold'>
                             <UserRound className='w-5 h-5 ' strokeWidth={3}/>
