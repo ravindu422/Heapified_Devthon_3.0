@@ -2,16 +2,27 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AuthCard from "../components/AuthCard";
 import { login } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setAuth } = useAuth(); // 🔑 from AuthContext
 
   const handleLogin = async () => {
     try {
-      await login({ email, password });
-      navigate("/");
+      const res = await login({ email, password });
+
+      // Save token + user globally
+      setAuth(res.data.token, res.data.user);
+
+      // 🔐 ROLE-BASED REDIRECT
+      if (res.data.user.role === "ADMIN") {
+        navigate("/alert-manage");
+      } else {
+        navigate("/");
+      }
     } catch (err) {
       alert(err.response?.data?.message || "Invalid credentials");
     }
@@ -19,7 +30,6 @@ export default function Login() {
 
   return (
     <AuthCard title="Welcome Back" subtitle="Please enter your details">
-
       <div className="input-group">
         <input
           type="email"

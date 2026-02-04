@@ -25,6 +25,8 @@ export default function Register() {
         email: form.email,
         password: form.password,
       });
+
+      // Always go to login after register
       navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
@@ -33,7 +35,6 @@ export default function Register() {
 
   return (
     <AuthCard title="Welcome SafeLanka" subtitle="Create your account">
-
       <div className="input-group">
         <input
           placeholder="Full Name"
