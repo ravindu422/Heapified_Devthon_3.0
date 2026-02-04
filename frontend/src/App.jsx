@@ -3,6 +3,8 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+
+import SafeZoneFinder from './pages/SafeZoneFinder'
 import Home from './pages/Home'
 import AlertManage from './pages/admin/AlertManage'
 
@@ -48,7 +50,7 @@ function App() {
       <Routes>
         {/* Public Routes */}
         <Route path='/' element={<Home />}/>
-        <Route path='/safe-zones' element={<SafeZones />}/>
+        <Route path='/safe-zones' element={<SafeZoneFinder />} />
         <Route path='/crisis-map' element={<CrisisMap />}/>
         <Route path='/resources' element={<Resources />}/>
         <Route path='/volunteer-signup' element={<VolunteerSignup />}/>
