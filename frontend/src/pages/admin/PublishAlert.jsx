@@ -37,7 +37,7 @@ const PublishAlert = () => {
         toast.success('Alert published successfully', {
           duration: 4000,
           position: 'top-center',
-          style: { background: '#ffff', color: '#fff' },
+          style: { background: '#fff', color: '#000' },
         });
 
         await fetchRecentAlerts();
