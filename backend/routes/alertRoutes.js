@@ -4,9 +4,9 @@ import { createAlertValidation, updateAlertValidation, validate } from '../valid
 
 const router = express.Router();
 
-router.get('/', getAlert);
 router.get('/recent', getRecentAlerts);
 router.get('/:id', getAlertById);
+router.get('/', getAlert);
 
 // Protected routes
 router.post('/', createAlertValidation, validate, createAlert);
