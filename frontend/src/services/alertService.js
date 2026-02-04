@@ -37,6 +37,26 @@ const alertService = {
              console.error("API Error (fetch):", error);
             throw error.response?.data || { message: 'Server unreachable' };
         }
+    },
+
+    updateAlert: async (id, alertData) => {
+        try {
+            const response = await api.put(`/alerts/${id}`, alertData);
+            return response.data;
+        } catch (error) {
+            console.error("API Error (update):", error);
+            throw error.response?.data || { message: 'Failed to update alert' };
+        }
+    },
+
+    deleteAlert: async (id) => {
+        try {
+            const response = await api.delete(`/alert/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("API Error (delete):", error);
+            throw error.response?.data || { message: 'Failed to delete alert' };
+        }
     }
 };
 
