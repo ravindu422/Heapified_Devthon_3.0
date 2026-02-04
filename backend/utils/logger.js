@@ -9,9 +9,17 @@ const colors = {
 
 const timestamp = () => new Date().toISOString();
 
+const formatArg = (arg) => {
+    if (arg instanceof Error) return arg.stack || arg.message;
+    if (typeof arg === 'object') {
+        try { return JSON.stringify(arg); } catch { return String(arg); }
+    }
+    return String(arg);
+};
+
 export const logger = {
-    info : (msg) => console.log(`${colors.info}[INFO] ${timestamp()} - ${msg}${RESET}`),
-    success : (msg) => console.log(`${colors.success}[INFO] ${timestamp()} - ${msg}${RESET}`),
-    warn : (msg) => console.log(`${colors.warn}[INFO] ${timestamp()} - ${msg}${RESET}`),
-    error : (msg) => console.log(`${colors.error}[INFO] ${timestamp()} - ${msg}${RESET}`),
+    info: (...args) => console.log(`${colors.info}[INFO] ${timestamp()} - ${args.map(formatArg).join(' ')}${RESET}`),
+    success: (...args) => console.log(`${colors.success}[INFO] ${timestamp()} - ${args.map(formatArg).join(' ')}${RESET}`),
+    warn: (...args) => console.log(`${colors.warn}[INFO] ${timestamp()} - ${args.map(formatArg).join(' ')}${RESET}`),
+    error: (...args) => console.error(`${colors.error}[ERROR] ${timestamp()} - ${args.map(formatArg).join(' ')}${RESET}`),
 }
