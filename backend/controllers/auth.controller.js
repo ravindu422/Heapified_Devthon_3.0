@@ -5,17 +5,24 @@ import asyncHandler from "../utils/asyncHandler.js";
 
 /**
  * Generate JWT token
+ * - Includes role for RBAC
  */
-const signToken = (userId) => {
+const signToken = (user) => {
   return jwt.sign(
-    { sub: userId },
+    {
+      sub: user._id,
+      role: user.role, // 🔐 RBAC
+    },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+    {
+      expiresIn: process.env.JWT_EXPIRES_IN || "7d",
+    }
   );
 };
 
 /**
  * @route   POST /api/auth/register
+ * @access  Public
  */
 export const register = asyncHandler(async (req, res) => {
   const { fullName, email, password } = req.body;
@@ -41,15 +48,16 @@ export const register = asyncHandler(async (req, res) => {
   // Hash password
   const passwordHash = await bcrypt.hash(password, 10);
 
-  // Create user
+  // Create user (ROLE DEFAULTS TO USER)
   const user = await User.create({
     fullName,
     email: email.toLowerCase(),
     passwordHash,
+    // role: "USER" → default from schema
   });
 
   // Generate token
-  const token = signToken(user._id);
+  const token = signToken(user);
 
   res.status(201).json({
     success: true,
@@ -58,12 +66,14 @@ export const register = asyncHandler(async (req, res) => {
       id: user._id,
       fullName: user.fullName,
       email: user.email,
+      role: user.role, // ✅ frontend needs this
     },
   });
 });
 
 /**
  * @route   POST /api/auth/login
+ * @access  Public
  */
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -75,48 +85,54 @@ export const login = asyncHandler(async (req, res) => {
   }
 
   // Find user WITH passwordHash
-  const user = await User
-    .findOne({ email: email.toLowerCase() })
-    .select("+passwordHash");
+  const user = await User.findOne({
+    email: email.toLowerCase(),
+  }).select("+passwordHash");
 
-  // Password check
+  // Check password
   if (!user || !(await user.comparePassword(password))) {
     res.status(401);
     throw new Error("Invalid email or password");
   }
 
   // Generate token
-  const token = signToken(user._id);
+  const token = signToken(user);
 
-  res.json({
+  res.status(200).json({
     success: true,
     token,
     user: {
       id: user._id,
       fullName: user.fullName,
       email: user.email,
+      role: user.role, // ✅ RBAC exposed
     },
   });
 });
-
 
 /**
  * @route   GET /api/auth/me
  * @access  Protected
  */
 export const me = asyncHandler(async (req, res) => {
-  res.json({
+  res.status(200).json({
     success: true,
-    user: req.user,
+    user: {
+      id: req.user._id,
+      fullName: req.user.fullName,
+      email: req.user.email,
+      role: req.user.role,
+    },
   });
 });
 
 /**
  * @route   POST /api/auth/logout
+ * @access  Protected
  */
 export const logout = asyncHandler(async (req, res) => {
   // Stateless JWT → frontend deletes token
-  res.json({
+  res.status(200).json({
     success: true,
     message: "Logged out successfully",
   });
