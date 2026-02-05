@@ -84,7 +84,38 @@ export const updateAlertValidation = [
 
     body('affectedAreas')
         .optional()
+        .isArray({ min: 1 })
+        .withMessage('At least one affected area is required when updating'),
+    
+    body('affectedAreas.*.name')
+        .optional()
+        .trim()
+        .notEmpty()
+        .withMessage('Area name is required'),
+    
+    body('affectedAreas.*.displayName')
+        .optional()
         .trim(),
+    
+    body('affectedAreas.*.geometry')
+        .optional()
+        .notEmpty()
+        .withMessage('Area geometry is required'),
+    
+    body('affectedAreas.*.geometry.type')
+        .optional()
+        .isIn(['Point', 'Polygon', 'MultiPolygon', 'LineString'])
+        .withMessage('Invalid geometry type'),
+    
+    body('affectedAreas.*.coordinates.latitude')
+        .optional()
+        .isFloat({ min: -90, max: 90 })
+        .withMessage('Invalid latitude'),
+
+    body('affectedAreas.*.coordinates.longitude')
+        .optional()
+        .isFloat({ min: -180, max: 180 })
+        .withMessage('Invalid longitude'),
 
     body('remarks')
         .optional()
