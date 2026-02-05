@@ -51,7 +51,7 @@ const alertService = {
 
     deleteAlert: async (id) => {
         try {
-            const response = await api.delete(`/alert/${id}`);
+            const response = await api.delete(`/alerts/${id}`);
             return response.data;
         } catch (error) {
             console.error("API Error (delete):", error);
