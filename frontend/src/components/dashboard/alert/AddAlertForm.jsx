@@ -260,24 +260,6 @@ const AddAlertForm = ({ onSubmit, loading }) => {
                     )}
                 </div>
 
-                {/* Affected Areas */}
-                {/* <div className='relative'>
-                    <input
-                        type='text'
-                        id='affectedAreas'
-                        name='affectedAreas'
-                        value={formData.affectedAreas}
-                        onChange={handleChange}
-                        placeholder=" "
-                        className={inputClasses(touched.affectedAreas && errors.affectedAreas)}
-                    />
-                    <label htmlFor='affectedAreas' className={labelClasses(touched.affectedAreas && errors.affectedAreas)}>
-                        Affected Areas
-                    </label>
-                    {touched.affectedAreas && errors.affectedAreas && (
-                        <p className='mt-1 ml-1 text-xs text-red-500'>{errors.affectedAreas}</p>
-                    )}
-                </div> */}
                 <LocationInput
                     selectedLocations={formData.affectedAreas}
                     onLocationsChange={handleLocationsChange}
