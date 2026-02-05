@@ -204,7 +204,24 @@ export const updateAlert = async (req, res) => {
         if (title !== undefined) alert.title = title;
         if (message !== undefined) alert.message = message;
         if (severityLevel !== undefined) alert.severityLevel = severityLevel;
-        if (affectedAreas !== undefined) alert.affectedAreas = affectedAreas;
+
+        if (affectedAreas !== undefined) {
+            const transformedAreas = affectedAreas.map(area => ({
+                name: area.name,
+                displayName: area.displayName,
+                geometry: area.geometry,
+                centerPoint: area.centerPoint || {
+                    type: 'Point',
+                    coordinates: [
+                        area.coordinates?.longitude || 0,
+                        area.coordinates?.latitude || 0
+                    ]
+                },
+                boundingBox: area.boundingBox
+            }));
+            alert.affectedAreas = transformedAreas;
+        }
+
         if (remarks !== undefined) alert.remarks = remarks;
 
         await alert.save();
@@ -215,7 +232,7 @@ export const updateAlert = async (req, res) => {
             success: true,
             message: 'Alert updated successfully',
             data: alert
-        })
+        });
     } catch (error) {
         logger.error('Error updating alert:', error);
 
