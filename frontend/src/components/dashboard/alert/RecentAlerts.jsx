@@ -1,8 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ArrowDown, ChevronDown, ClockFading, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const RecentAlerts = ({ alerts, onRefresh }) => {
+  const [expandedAlertId, setExpandedAlertId] = useState(null);
+
+  const toggleExpand = (id) => {
+    setExpandedAlertId(expandedAlertId === id ? null : id);
+  };
+
   const getSeverityColor = (level) => {
     const colors = {
       Critical: 'bg-red-500',
@@ -51,36 +57,62 @@ const RecentAlerts = ({ alerts, onRefresh }) => {
             <p className='text-sm'>No recent alerts</p>
           </div>
         ) : (
-          alerts.map((alert) => (
-            <div
-              key={alert._id}
-              className='border border-gray-200 rounded-2xl p-4 hover:shadow-md transition-all duration-200 cursor-pointer group'
-            >
-              <div className='flex items-start justify-between mb-2'>
-                <div className='flex items-center gap-2'>
-                  {getSeverityDot(alert.severityLevel)}
-                  <h3 className='text-sm font-semibold text-gray-900 '>
-                    {alert.title}
-                  </h3>
+          alerts.map((alert) => {
+            const isExpanded = expandedAlertId === alert._id;
+            return (
+              <div
+                key={alert._id}
+                className={`border border-gray-200 rounded-2xl p-4 transition-all duration-200 group bg-white ${
+                  isExpanded ? 'shadow-sm' : 'hover:shadow-md'
+                }`}
+              >
+                {/* Header Section (Always Visible) */}
+                <div className='flex items-start justify-between mb-3'>
+                  <div className='flex items-center gap-2'>
+                    {getSeverityDot(alert.severityLevel)}
+                    <h3 className='text-sm font-semibold text-gray-900 '>
+                      {alert.title}
+                    </h3>
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <span className='text-[11px] text-gray-500'>{alert.timeAgo}</span>
+                    <ClockFading className='w-3 h-3 text-gray-600' />
+                  </div>
                 </div>
-                <div className='flex items-center gap-2'>
-                  <span className='text-[11px] text-gray-500'>{alert.timeAgo}</span>
-                  <ClockFading className='w-3 h-3 text-gray-600'/>
-                </div>
-              </div>
-              
-              <p className='text-xs text-gray-600 mb-3 line-clamp-3 ml-4'>
-                <span className='font-medium'>Affected Areas:</span> {formatAffectedAreas(alert.affectedAreas)}
-              </p>
 
-              <div className='flex justify-end'>
-                <button className='flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200'>
-                    view more
-                    <ChevronDown className='w-3 h-3 font-medium mt-1'/>
-                </button>
+                <p className='text-xs text-gray-600 mb-1 ml-4'>
+                  <span className='font-medium'>Affected Areas:</span> {formatAffectedAreas(alert.affectedAreas)}
+                </p>
+
+                {/* Expanded Content (Message) - Only shows if isExpanded is true */}
+                {isExpanded && (
+                  <div className="ml-1 mb-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                     <p className="text-xs text-gray-700 leading-relaxed p-3 bg-white ">
+                        {alert.message}
+                    </p>
+                  </div>
+                )}
+
+                {/* Toggle Button */}
+                <div className='flex justify-end'>
+                  <button 
+                    onClick={(e) => {
+                        e.stopPropagation(); // Prevent bubbling if parent has onClick
+                        toggleExpand(alert._id);
+                    }}
+                    className='flex items-center gap-1 text-xs text-teal-600 hover:text-teal-700 font-medium transition-colors duration-200 cursor-pointer'
+                  >
+                    {isExpanded ? 'View Less' : 'View More'}
+                    <ChevronDown 
+                        className={`w-3 h-3 font-medium mt-0.5 transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                        }`}
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
