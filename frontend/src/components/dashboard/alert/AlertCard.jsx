@@ -46,11 +46,9 @@ const AlertCard = ({
         const areaNames = areas.map(area => area.name || area.displayName).filter(Boolean);
 
         if (areaNames.length === 0) return 'No areas specified';
-        if (areaNames.length === 1) return areaNames[0];
-        if (areaNames.length === 2) return areaNames.join(' and ');
-
-        const remaining = areaNames.length - 2;
-        return `${areaNames.slice(0, 2).join(', ')} and ${remaining} more`;
+        
+        // Join all areas with commas
+        return areaNames.join(', ');
     };
 
     return (
