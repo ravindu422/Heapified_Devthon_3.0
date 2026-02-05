@@ -7,6 +7,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import SafeZoneFinder from './pages/SafeZoneFinder'
 import Home from './pages/Home'
 import AlertManage from './pages/admin/AlertManage'
+import ResourcesAvailability from './pages/ResourcesAvailability'
 
 // Placeholder components for new routes
 const SafeZones = () => (
@@ -52,7 +53,7 @@ function App() {
         <Route path='/' element={<Home />}/>
         <Route path='/safe-zones' element={<SafeZoneFinder />} />
         <Route path='/crisis-map' element={<CrisisMap />}/>
-        <Route path='/resources' element={<Resources />}/>
+        <Route path='/resources' element={<ResourcesAvailability />}/>
         <Route path='/volunteer-signup' element={<VolunteerSignup />}/>
         <Route path='/updates' element={<Updates />}/>
         
