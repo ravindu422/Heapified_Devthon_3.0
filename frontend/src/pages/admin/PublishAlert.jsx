@@ -4,7 +4,8 @@ import DashboardLayout from '../../components/dashboard/DashboardLayout'
 import AddAlertForm from '../../components/dashboard/alert/AddAlertForm';
 import alertService from '../../services/alertService';
 import RecentAlerts from '../../components/dashboard/alert/RecentAlerts';
-import toast, { Toaster } from 'react-hot-toast';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const PublishAlert = () => {
   const [recentAlerts, setRecentAlerts] = useState([]);
@@ -35,9 +36,12 @@ const PublishAlert = () => {
       if (response.success) {
         // --- Add toast ---
         toast.success('Alert published successfully', {
-          duration: 4000,
-          position: 'top-center',
-          style: { background: '#fff', color: '#000' },
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: false,
+          draggable: false,
         });
 
         await fetchRecentAlerts();
@@ -50,8 +54,12 @@ const PublishAlert = () => {
       const errorMessage = error.message || 'An error occured while publishing the alert';
 
       toast.error(errorMessage, {
-        duration: 4000,
-        position: 'top-right',
+        position: "top-right",
+        autoClose: 4000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
       });
       return false;
     } finally {
@@ -76,7 +84,7 @@ const PublishAlert = () => {
 
   return (
     <DashboardLayout activePage="alert">
-      <Toaster/>
+      <ToastContainer />
       <div className='space-y-3'>
         <h1 className='text-2xl font-semibold text-gray-900 mb-2 ml-11'>Publish Emergency Alert</h1>
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-6 ml-4 mr-6'>
