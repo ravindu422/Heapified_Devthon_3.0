@@ -20,7 +20,7 @@ const Navbar = () => {
                             Find Safe Zone
                         </a>
                         <a
-                            href="#"
+                            href="/crisis-map"
                             className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
                         >
                             View Crisis Map
