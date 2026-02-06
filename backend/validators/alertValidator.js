@@ -15,6 +15,11 @@ export const createAlertValidation = [
         .isLength({ max: 1000 })
         .withMessage('Message cannot exceed 1000 characters'),
 
+    body('alertType')
+        .notEmpty()
+        .withMessage('Alert type is required')
+        .isIn(['Flood', 'Landslide', 'Other']),
+
     body('severityLevel')
         .notEmpty()
         .withMessage('Severity level is required')
@@ -77,6 +82,10 @@ export const updateAlertValidation = [
         .trim()
         .isLength({ max: 1000 })
         .withMessage('Message cannot exceed 1000 characters'),
+    
+    body('alertType')
+        .optional()
+        .isIn(['Flood', 'Landslide', 'Other']),
 
     body('severityLevel')
         .optional()
