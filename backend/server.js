@@ -3,12 +3,22 @@ import { intiSocket } from "./config/socket.js";
 import app from "./app.js";
 import mongoose from "mongoose";
 import http from 'http';
+import dns from "dns";
 import { logger } from "./utils/logger.js";
 
 const PORT = process.env.PORT;
 const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 const server = http.createServer(app);
+
+const dnsServers = process.env.DNS_SERVERS
+  ? process.env.DNS_SERVERS.split(",").map((server) => server.trim()).filter(Boolean)
+  : [];
+
+if (dnsServers.length > 0) {
+  dns.setServers(dnsServers);
+  logger.info(`Using custom DNS servers: ${dnsServers.join(", ")}`);
+}
 
 connectDB();
 
@@ -18,7 +28,7 @@ app.set('io', io);
 
 //Start server 
 server.listen(PORT, () => {
-  logger.success(`Server running on port ${PORT}`);
+  logger.success(`server running on port ${PORT}`);
 });
 
 server.on("error", (err) => {
