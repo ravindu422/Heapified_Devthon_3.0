@@ -5,7 +5,7 @@ import { logger } from "../utils/logger.js";
 // @route POST /api/alerts
 export const createAlert = async (req, res) => {
     try {
-        const { title, message, severityLevel, affectedAreas, remarks } = req.body;
+        const { title, message, alertType, severityLevel, affectedAreas, remarks } = req.body;
 
         const transformedAreas = affectedAreas.map(area => ({
             name: area.name,
@@ -24,6 +24,7 @@ export const createAlert = async (req, res) => {
         const alert = await Alert.create({
             title, 
             message, 
+            alertType,
             severityLevel, 
             affectedAreas: transformedAreas, 
             remarks: remarks || ''
@@ -190,7 +191,7 @@ export const getAlertById = async (req, res) => {
 // @route  PUT /api/alerts/:id
 export const updateAlert = async (req, res) => {
     try {
-        const { title, message, severityLevel, affectedAreas, remarks } = req.body;
+        const { title, message, alertType, severityLevel, affectedAreas, remarks } = req.body;
 
         const alert = await Alert.findById(req.params.id);
 
@@ -203,6 +204,7 @@ export const updateAlert = async (req, res) => {
 
         if (title !== undefined) alert.title = title;
         if (message !== undefined) alert.message = message;
+        if (alertType !== undefined) alert.alertType = alertType;
         if (severityLevel !== undefined) alert.severityLevel = severityLevel;
 
         if (affectedAreas !== undefined) {
