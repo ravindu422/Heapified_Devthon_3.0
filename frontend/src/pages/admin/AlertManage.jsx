@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/dashboard/DashboardLayout'
 import alertService from '../../services/alertService';
-import { ArrowUpDown, Loader2, Plus, Search } from 'lucide-react';
+import { ArrowUpDown, Loader2, Plus, Search, Map, X } from 'lucide-react';
 import AlertCard from '../../components/dashboard/alert/AlertCard';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import EditAlertModal from '../../components/dashboard/alert/EditAlertModal';
 import DeleteConfirmationModal from '../../components/dashboard/alert/DeleteConfirmModal';
+import InteractiveMap from '../../components/common/InteractiveMap';
 
 const AlertManage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -25,6 +26,8 @@ const AlertManage = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [alertToDelete, setAlertToDelete] = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
+
+    const [ isMapModalOpen, setIsMapModalOpen] = useState(false);
 
     const fetchAlerts = async () => {
         try {
@@ -171,10 +174,23 @@ const AlertManage = () => {
                     </div>
 
                     <div className="flex items-center gap-3 mr-14">
+                        <button 
+                            onClick={() => setIsMapModalOpen(true)}
+                            className="p-2.5 text-gray-600 hover:bg-teal-50 hover:text-teal-600 border border-transparent hover:border-teal-200 rounded-lg transition-all duration-200 flex items-center gap-2"
+                            title="View Interactive Map"
+                        >
+                            <Map className="w-5 h-5" />
+                            <span className="hidden sm:inline text-sm font-medium">Map View</span>
+                        </button>
+
+                        <div className="w-px h-6 bg-gray-300"></div>
+
                         <Link to="/publish-alert" className="p-2.5 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200">
                             <Plus className="w-5 h-5" />
                         </Link>
+
                         <div className="w-px h-6 bg-gray-300"></div>
+
                         <button 
                             onClick={toggleSort}
                             className="p-2.5 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors duration-200"
@@ -253,6 +269,21 @@ const AlertManage = () => {
                 }}
                 onConfirm={confirmDelete}
              />
+
+            {isMapModalOpen && (
+                <div className="fixed inset-0 z-50 flex flex-col animate-in fade-in duration-300">
+                    {/* We don't need a wrapper with padding/margins anymore.
+                        The InteractiveMap component now handles the full layout including
+                        the close button and sidebar.
+                    */}
+                    <div className="w-full h-full bg-white shadow-2xl relative">
+                        <InteractiveMap 
+                            alerts={safeAlerts} 
+                            onClose={() => setIsMapModalOpen(false)} 
+                        />
+                    </div>
+                </div>
+            )}
         </DashboardLayout>
     );
 };
