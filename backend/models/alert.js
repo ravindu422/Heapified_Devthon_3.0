@@ -13,6 +13,12 @@ const alertSchema = new mongoose.Schema({
         trim: true,
         maxlength: [1000, 'Message cannot exceed 1000 characters']
     },
+    alertType: {
+        type: String,
+        enum: ['Flood', 'Landslide', 'Other'],
+        required: [true, 'Alert type is required'],
+        default: 'Other'
+    },
     severityLevel: {
         type: String,
         enum: ['Critical', 'High', 'Medium', 'Low'],
@@ -65,6 +71,7 @@ const alertSchema = new mongoose.Schema({
 
 alertSchema.index({ createAt: -1 });
 alertSchema.index({ severityLevel: 1 });
+alertSchema.index({ alertType: 1 });
 alertSchema.index({ 'affectedAreas.centerPoint': '2dsphere' });
 alertSchema.index({ 'affectedAreas.geometry': '2dsphere' });
 
