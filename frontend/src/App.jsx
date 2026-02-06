@@ -4,12 +4,14 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import Home from './pages/Home'
 import PublishAlert from './pages/admin/PublishAlert'
 import AlertManage from './pages/admin/AlertManage'
+import ViewCrisisMap from './pages/ViewCrisisMap'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Home />}/>
+        <Route path='/crisis-map' element={<ViewCrisisMap />}/>
         <Route path='/publish-alert' element={<PublishAlert/>}/>
         <Route path='/manage-alert' element={<AlertManage/>}/>
       </Routes>
