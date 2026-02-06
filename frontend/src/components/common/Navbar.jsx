@@ -22,7 +22,7 @@ const Navbar = () => {
               Find Safe Zone
             </a>
             <a
-              href="#"
+              href="/crisis-map"
               className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
             >
               View Crisis Map
@@ -46,6 +46,7 @@ const Navbar = () => {
               Updates
             </a>
           </div>
+
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
@@ -106,7 +107,7 @@ const Navbar = () => {
               Find Safe Zone
             </a>
             <a
-              href="#"
+              href="/crisis-map"
               className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
             >
               View Crisis Map
