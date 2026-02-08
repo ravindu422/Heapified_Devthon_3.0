@@ -8,6 +8,7 @@ import SafeZoneFinder from './pages/SafeZoneFinder'
 import Home from './pages/Home'
 import AlertManage from './pages/admin/AlertManage'
 import ResourcesAvailability from './pages/ResourcesAvailability'
+import Updates from './pages/Updates'
 
 // Placeholder components for new routes
 const SafeZones = () => (
@@ -35,13 +36,6 @@ const VolunteerSignup = () => (
   <div className="min-h-screen pt-20 px-4">
     <h1 className="text-3xl font-bold">Volunteer Signup - Coming Soon</h1>
     <p className="mt-4 text-gray-600">This page will have volunteer registration form.</p>
-  </div>
-);
-
-const Updates = () => (
-  <div className="min-h-screen pt-20 px-4">
-    <h1 className="text-3xl font-bold">Updates - Coming Soon</h1>
-    <p className="mt-4 text-gray-600">This page will show emergency updates feed.</p>
   </div>
 );
 

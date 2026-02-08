@@ -1,5 +1,6 @@
 import React from 'react';
 import { MapPin, Globe, AlertTriangle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const HeroSection = ({ activeAlert }) => {
   return (
@@ -50,15 +51,15 @@ const HeroSection = ({ activeAlert }) => {
 
           {/* Quick Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 mt-4">
-            <button className="group bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2">
+            <Link to="/safe-zones" className="group bg-red-600 hover:bg-red-700 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2">
               <MapPin className="w-5 h-5" />
               <span>Find Nearest Safe Zone</span>
-            </button>
+            </Link>
             
-            <button className="group bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2">
+            <Link to="/crisis-map" className="group bg-teal-600 hover:bg-teal-700 text-white px-6 py-4 rounded-lg font-semibold shadow-lg transition-all duration-200 flex items-center justify-center gap-2">
               <Globe className="w-5 h-5" />
               <span>View Crisis Map</span>
-            </button>
+            </Link>
           </div>
         </div>
       </div>
