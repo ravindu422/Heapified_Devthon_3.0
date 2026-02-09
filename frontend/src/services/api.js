@@ -1,31 +1,25 @@
 import axios from 'axios';
 
-// Base URL for your API - update this when you deploy
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5080/api';
+const LOCAL_BACKEND = 'http://localhost:5080/api';
 
-// Create axios instance with default config
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  timeout: 10000, // 10 seconds timeout
+    baseURL: import.meta.VITE_API_URL || LOCAL_BACKEND,
+    timeout: 10000,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    withCredentials: true
 });
 
-// Request interceptor - add auth token if needed
-api.interceptors.request.use(
-  (config) => {
-    // Add authorization token if it exists
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
+
+// Attach token automatically
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-);
+  return config;
+});
 
 // Response interceptor - handle common errors
 api.interceptors.response.use(
@@ -37,7 +31,7 @@ api.interceptors.response.use(
       switch (error.response.status) {
         case 401:
           // Unauthorized - redirect to login or clear token
-          localStorage.removeItem('authToken');
+          localStorage.removeItem('token');
           // window.location.href = '/login';
           break;
         case 403:
@@ -120,5 +114,4 @@ export const coordinatorAPI = {
   getVolunteers: (params) => api.get('/coordinator/volunteers', { params }),
 };
 
-// Export the axios instance for custom requests
 export default api;
