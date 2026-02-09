@@ -76,7 +76,14 @@ const MapLogic = ({ setMapInstance, bounds, enableScrollZoom }) => {
 };
 
 // --- 5. Main Component ---
-const CrisisMap = ({ alerts = [], enableScrollZoom = false, selectedAlertType = 'All' }) => {
+const CrisisMap = ({ 
+    alerts = [], 
+    enableScrollZoom = false, 
+    selectedAlertType = 'All',
+    isEmbedded = false,
+    intialZoom = 8,
+    tileUrl = "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+ }) => {
     const [map, setMap] = useState(null);
 
     // -- Utilities --
@@ -167,7 +174,7 @@ const CrisisMap = ({ alerts = [], enableScrollZoom = false, selectedAlertType = 
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+                    url={tileUrl}
                     subdomains="abcd"
                     className="blue-map-tiles"
                 />
@@ -237,7 +244,7 @@ const CrisisMap = ({ alerts = [], enableScrollZoom = false, selectedAlertType = 
             </MapContainer>
 
             {/* Controls Layer */}
-            <MapControls onFitBounds={handleFitBounds} />
+            {!isEmbedded && <MapControls onFitBounds={handleFitBounds} />}
         </div>
     );
 };
