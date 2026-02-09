@@ -4,11 +4,16 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+
+import crisisRoutes from './routes/crisis.routes.js';
+import resourcesRoutes from './routes/resources.routes.js';
+import updatesRoutes from './routes/update.routes.js';
 import locationRoutes from './routes/locationRoutes.js';
 import taskRoute from './routes/taskRoute.js';
 import authRoutes from './routes/auth.routes.js';
 import alertRoutes from './routes/alertRoutes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+
 
 const app = express();
 
@@ -41,6 +46,9 @@ app.get('/health', (req, res) => {
 });
 
 //Routes
+app.use('/api/crisis', crisisRoutes);
+app.use('/api/resources', resourcesRoutes);
+app.use('/api/updates', updatesRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/locations', locationRoutes);
 app.use('/api/task',taskRoute)

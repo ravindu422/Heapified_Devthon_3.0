@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
 
   return (
     <nav className="bg-black text-white">
@@ -15,38 +18,37 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-            <a
-              href="#"
-              className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-            >
-              Find Safe Zone
-            </a>
-            <a
-              href="/crisis-map"
-              className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-            >
-              View Crisis Map
-            </a>
-            <a
-              href="#"
-              className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-            >
-              Resources Availability
-            </a>
-            <a
-              href="/volunteer-dashboard"
+            <Link
+                to="/safe-zones"
+                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
+             >
+               Find Safe Zone
+             </Link>
+            <Link
+                to="/crisis-map"
+                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
+             >
+                 View Crisis Map
+             </Link>
+            <Link
+                to="/resources"
+                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
+             >
+                 Resources Availability
+             </Link>
+            <Link
+              to="/volunteer-dashboard"
               className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
             >
               Volunteer SignUp
-            </a>
-            <a
-              href="#"
-              className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-            >
-              Updates
-            </a>
+            </Link>
+            <Link
+                 to="/updates"
+                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
+             >
+                 Updates
+             </Link>
           </div>
-
 
           {/* Mobile Menu Button */}
           <div className="lg:hidden">
@@ -93,48 +95,51 @@ const Navbar = () => {
               )}
             </button>
           </div>
-        </div>
-      </div>
 
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="lg:hidden">
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-black">
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-            >
-              Find Safe Zone
-            </a>
-            <a
-              href="/crisis-map"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-            >
-              View Crisis Map
-            </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-            >
-              Resources Availability
-            </a>
-            <a
-              href="/volunteer-registration"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-            >
-              Volunteer SignUp
-            </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-            >
-              Updates
-            </a>
-          </div>
-        </div>
-      )}
-    </nav>
-  );
-};
+            {/* Mobile Menu */}
+            {isMenuOpen && (
+                <div className="lg:hidden">
+                    <div className="px-2 pt-2 pb-3 space-y-1 bg-black">
+                        <Link
+                            to="/safe-zones"
+                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Find Safe Zone
+                        </Link>
+                        <Link
+                            to="/crisis-map"
+                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            View Crisis Map
+                        </Link>
+                        <Link
+                            to="/resources"
+                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Resources Availability
+                        </Link>
+                        <Link
+                            to="/volunteer-signup"
+                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Volunteer SignUp
+                        </Link>
+                        <Link
+                            to="/updates"
+                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                            onClick={() => setIsMenuOpen(false)}
+                        >
+                            Updates
+                        </Link>
+                    </div>
+                </div>
+            )}
+        </nav>
+    );
+}
 
 export default Navbar;
