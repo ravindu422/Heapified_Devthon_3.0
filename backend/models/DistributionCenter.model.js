@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
 // Stock Item Schema
-const stockItemSchema = new mongoose.Schema({
+const stockItemSchema = new Schema({
   itemName: {
     type: String,
     required: true,
@@ -59,7 +59,7 @@ const stockItemSchema = new mongoose.Schema({
 });
 
 // Distribution Center Schema
-const distributionCenterSchema = new mongoose.Schema({
+const distributionCenterSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Please provide a distribution center name'],
@@ -391,11 +391,10 @@ distributionCenterSchema.statics.findLowStockCenters = function() {
 };
 
 // Pre-save middleware
-distributionCenterSchema.pre('save', function(next) {
+distributionCenterSchema.pre('save', async function() {
   this.lastUpdated = Date.now();
-  next();
 });
 
-const DistributionCenter = mongoose.model('DistributionCenter', distributionCenterSchema);
+const DistributionCenter = model('DistributionCenter', distributionCenterSchema);
 
-module.exports = DistributionCenter;
+export default DistributionCenter;

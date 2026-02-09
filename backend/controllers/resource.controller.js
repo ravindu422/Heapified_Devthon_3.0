@@ -1,4 +1,4 @@
-const DistributionCenter = require('../models/DistributionCenter.model');
+import DistributionCenter from '../models/DistributionCenter.model.js';
 
 /**
  * Calculate distance between two coordinates using Haversine formula
@@ -21,7 +21,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
  * @route   GET /api/resources
  * @access  Public
  */
-exports.getDistributionCenters = async (req, res) => {
+export async function getDistributionCenters(req, res) {
   try {
     const {
       latitude,
@@ -161,14 +161,14 @@ exports.getDistributionCenters = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get single distribution center by ID
  * @route   GET /api/resources/:id
  * @access  Public
  */
-exports.getDistributionCenterById = async (req, res) => {
+export async function getDistributionCenterById(req, res) {
   try {
     const { latitude, longitude } = req.query;
 
@@ -209,14 +209,14 @@ exports.getDistributionCenterById = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Search for specific item across all centers
  * @route   GET /api/resources/search/item
  * @access  Public
  */
-exports.searchItem = async (req, res) => {
+export async function searchItem(req, res) {
   try {
     const { itemName, minStock = 1, latitude, longitude } = req.query;
 
@@ -227,7 +227,7 @@ exports.searchItem = async (req, res) => {
       });
     }
 
-    const centers = await DistributionCenter.findCentersWithItem(itemName, parseInt(minStock));
+    const centers = await findCentersWithItem(itemName, parseInt(minStock));
 
     let results = centers.map(center => {
       const stockItem = center.getStockItem(itemName);
@@ -279,14 +279,14 @@ exports.searchItem = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get all low stock alerts
  * @route   GET /api/resources/alerts
  * @access  Public
  */
-exports.getLowStockAlerts = async (req, res) => {
+export async function getLowStockAlerts(req, res) {
   try {
     const { severity, isActive = true } = req.query;
 
@@ -338,21 +338,21 @@ exports.getLowStockAlerts = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get statistics
  * @route   GET /api/resources/stats
  * @access  Public
  */
-exports.getResourceStats = async (req, res) => {
+export async function getResourceStats(req, res) {
   try {
     const totalCenters = await DistributionCenter.countDocuments({ isActive: true });
     const activeCenters = await DistributionCenter.countDocuments({ isActive: true, status: 'Active' });
     const lowStockCenters = await DistributionCenter.countDocuments({ isActive: true, status: 'Limited Supply' });
     
     // Get all active alerts
-    const centersWithAlerts = await DistributionCenter.find({
+    const centersWithAlerts = await find({
       isActive: true,
       'alerts.isActive': true
     });
@@ -409,14 +409,14 @@ exports.getResourceStats = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Create new distribution center (Admin)
  * @route   POST /api/resources
  * @access  Private/Admin
  */
-exports.createDistributionCenter = async (req, res) => {
+export async function createDistributionCenter(req, res) {
   try {
     const center = await DistributionCenter.create(req.body);
 
@@ -433,14 +433,14 @@ exports.createDistributionCenter = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Update distribution center
  * @route   PUT /api/resources/:id
  * @access  Private/Admin
  */
-exports.updateDistributionCenter = async (req, res) => {
+export async function updateDistributionCenter(req, res) {
   try {
     const center = await DistributionCenter.findByIdAndUpdate(
       req.params.id,
@@ -471,14 +471,14 @@ exports.updateDistributionCenter = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Update stock item
  * @route   PATCH /api/resources/:id/stock
  * @access  Private/Coordinator
  */
-exports.updateStock = async (req, res) => {
+export async function updateStock(req, res) {
   try {
     const { itemName, currentStock } = req.body;
 
@@ -513,14 +513,14 @@ exports.updateStock = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Delete distribution center
  * @route   DELETE /api/resources/:id
  * @access  Private/Admin
  */
-exports.deleteDistributionCenter = async (req, res) => {
+export async function deleteDistributionCenter(req, res) {
   try {
     const center = await DistributionCenter.findById(req.params.id);
 
@@ -548,6 +548,5 @@ exports.deleteDistributionCenter = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
-module.exports = exports;

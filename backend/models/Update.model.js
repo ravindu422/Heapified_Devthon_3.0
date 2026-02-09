@@ -250,8 +250,12 @@ updateSchema.statics.searchUpdates = function(searchTerm) {
 };
 
 // Pre-save middleware
-updateSchema.pre('save', function(next) {
+updateSchema.pre('save', async function() {
   // Set published date if not set
+  if (!this.metadata) {
+    this.metadata = {};
+  }
+  
   if (!this.metadata.publishedAt && this.isActive) {
     this.metadata.publishedAt = new Date();
   }
@@ -260,8 +264,6 @@ updateSchema.pre('save', function(next) {
   if (this.expiresAt && this.expiresAt < new Date()) {
     this.isActive = false;
   }
-  
-  next();
 });
 
 // Method to format for timeline

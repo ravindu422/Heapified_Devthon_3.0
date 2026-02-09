@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import { Schema, model } from 'mongoose';
 
-const safeZoneSchema = new mongoose.Schema({
+const safeZoneSchema = new Schema({
   name: {
     type: String,
     required: [true, 'Please provide a safe zone name'],
@@ -254,11 +254,10 @@ safeZoneSchema.statics.findNearby = function(longitude, latitude, maxDistance = 
 };
 
 // Pre-save middleware
-safeZoneSchema.pre('save', function(next) {
+safeZoneSchema.pre('save', async function() {
   this.updatedAt = Date.now();
-  next();
 });
 
-const SafeZone = mongoose.model('SafeZone', safeZoneSchema);
+const SafeZone = model('SafeZone', safeZoneSchema);
 
-module.exports = SafeZone;
+export default SafeZone;

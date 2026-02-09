@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Update = require('../models/Update.model');
+import { connect, disconnect } from 'mongoose';
+import { deleteMany, insertMany } from '../models/Update.model';
 
 // Sample updates data
 const sampleUpdates = [
@@ -224,11 +224,11 @@ const seedUpdates = async () => {
     console.log('🌱 Starting to seed updates...');
 
     // Clear existing updates
-    await Update.deleteMany({});
+    await deleteMany({});
     console.log('✅ Cleared existing updates');
 
     // Insert sample data
-    const updates = await Update.insertMany(sampleUpdates);
+    const updates = await insertMany(sampleUpdates);
     console.log(`✅ Created ${updates.length} updates`);
 
     console.log('🎉 Updates seed data created successfully!');
@@ -255,7 +255,7 @@ const seedUpdates = async () => {
 // Run seed function
 const runSeed = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safelanka', {
+    await connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safelanka', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -263,7 +263,7 @@ const runSeed = async () => {
 
     await seedUpdates();
 
-    await mongoose.disconnect();
+    await disconnect();
     console.log('✅ Disconnected from MongoDB');
     
     process.exit(0);
@@ -273,7 +273,7 @@ const runSeed = async () => {
   }
 };
 
-module.exports = { seedUpdates, runSeed };
+export default { seedUpdates, runSeed };
 
 if (require.main === module) {
   runSeed();
