@@ -1,4 +1,4 @@
-const SafeZone = require('../models/SafeZone.model');
+import SafeZone from '../models/SafeZone.model.js';
 
 /**
  * Calculate distance between two coordinates using Haversine formula
@@ -21,7 +21,7 @@ const calculateDistance = (lat1, lon1, lat2, lon2) => {
  * @route   GET /api/safe-zones
  * @access  Public
  */
-exports.getSafeZones = async (req, res) => {
+export async function getSafeZones(req, res) {
   try {
     const {
       latitude,
@@ -162,14 +162,14 @@ exports.getSafeZones = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get single safe zone by ID
  * @route   GET /api/safe-zones/:id
  * @access  Public
  */
-exports.getSafeZoneById = async (req, res) => {
+export async function getSafeZoneById(req, res) {
   try {
     const { latitude, longitude } = req.query;
 
@@ -210,14 +210,14 @@ exports.getSafeZoneById = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Find nearest safe zones
  * @route   GET /api/safe-zones/nearest
  * @access  Public
  */
-exports.getNearestSafeZones = async (req, res) => {
+export async function getNearestSafeZones(req, res) {
   try {
     const { latitude, longitude, limit = 5, maxDistance = 50 } = req.query;
 
@@ -274,14 +274,14 @@ exports.getNearestSafeZones = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get available amenities (for filter options)
  * @route   GET /api/safe-zones/amenities/list
  * @access  Public
  */
-exports.getAvailableAmenities = async (req, res) => {
+export async function getAvailableAmenities(req, res) {
   try {
     const amenities = [
       { key: 'water', label: 'Water' },
@@ -307,14 +307,14 @@ exports.getAvailableAmenities = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get safe zone types (for filter options)
  * @route   GET /api/safe-zones/types/list
  * @access  Public
  */
-exports.getSafeZoneTypes = async (req, res) => {
+export async function getSafeZoneTypes(req, res) {
   try {
     const types = [
       'Shelter',
@@ -339,14 +339,14 @@ exports.getSafeZoneTypes = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Get safe zone statistics
  * @route   GET /api/safe-zones/stats
  * @access  Public
  */
-exports.getSafeZoneStats = async (req, res) => {
+export async function getSafeZoneStats(req, res) {
   try {
     const totalSafeZones = await SafeZone.countDocuments({ isActive: true });
     const activeSafeZones = await SafeZone.countDocuments({ isActive: true, status: 'Active' });
@@ -391,14 +391,14 @@ exports.getSafeZoneStats = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Create new safe zone (Admin only - will add auth later)
  * @route   POST /api/safe-zones
  * @access  Private/Admin
  */
-exports.createSafeZone = async (req, res) => {
+export async function createSafeZone(req, res) {
   try {
     const safeZone = await SafeZone.create(req.body);
 
@@ -415,14 +415,14 @@ exports.createSafeZone = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Update safe zone
  * @route   PUT /api/safe-zones/:id
  * @access  Private/Admin
  */
-exports.updateSafeZone = async (req, res) => {
+export async function updateSafeZone(req, res) {
   try {
     const safeZone = await SafeZone.findByIdAndUpdate(
       req.params.id,
@@ -453,14 +453,14 @@ exports.updateSafeZone = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Update safe zone capacity
  * @route   PATCH /api/safe-zones/:id/capacity
  * @access  Private/Coordinator
  */
-exports.updateCapacity = async (req, res) => {
+export async function updateCapacity(req, res) {
   try {
     const { current } = req.body;
 
@@ -495,14 +495,14 @@ exports.updateCapacity = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
 /**
  * @desc    Delete safe zone
  * @route   DELETE /api/safe-zones/:id
  * @access  Private/Admin
  */
-exports.deleteSafeZone = async (req, res) => {
+export async function deleteSafeZone(req, res) {
   try {
     const safeZone = await SafeZone.findById(req.params.id);
 
@@ -530,6 +530,5 @@ exports.deleteSafeZone = async (req, res) => {
       error: error.message
     });
   }
-};
+}
 
-module.exports = exports;

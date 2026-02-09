@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const SafeZone = require('../models/SafeZone.model');
+import { connect, disconnect } from 'mongoose';
+import { deleteMany, insertMany } from '../models/SafeZone.model';
 
 // Sample safe zones data for Sri Lanka (Colombo area)
 const sampleSafeZones = [
@@ -413,11 +413,11 @@ const seedSafeZones = async () => {
     console.log('🌱 Starting to seed safe zones data...');
 
     // Clear existing safe zones
-    await SafeZone.deleteMany({});
+    await deleteMany({});
     console.log('✅ Cleared existing safe zones');
 
     // Insert sample data
-    const safeZones = await SafeZone.insertMany(sampleSafeZones);
+    const safeZones = await insertMany(sampleSafeZones);
     console.log(`✅ Created ${safeZones.length} safe zones`);
 
     console.log('🎉 Safe zones seed data created successfully!');
@@ -447,7 +447,7 @@ const seedSafeZones = async () => {
 const runSeed = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safelanka', {
+    await connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safelanka', {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -456,7 +456,7 @@ const runSeed = async () => {
     await seedSafeZones();
 
     // Disconnect
-    await mongoose.disconnect();
+    await disconnect();
     console.log('✅ Disconnected from MongoDB');
     
     process.exit(0);
@@ -467,7 +467,7 @@ const runSeed = async () => {
 };
 
 // Export for use in other files
-module.exports = { seedSafeZones, runSeed };
+export default { seedSafeZones, runSeed };
 
 // Run if called directly
 if (require.main === module) {

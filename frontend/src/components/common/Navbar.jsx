@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const location = useLocation();
 
   return (
     <nav className="bg-black text-white">
@@ -19,35 +18,50 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
             <Link
-                to="/safe-zones"
-                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-             >
-               Find Safe Zone
-             </Link>
+              to="/safe-zones"
+              className={`text-sm xl:text-base font-medium transition-colors duration-200 ${location.pathname === '/safe-zones'
+                  ? 'text-teal-500'
+                  : 'hover:text-teal-400'
+                }`}
+            >
+              Find Safe Zone
+            </Link>
             <Link
-                to="/crisis-map"
-                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-             >
-                 View Crisis Map
-             </Link>
+              to="/crisis-map"
+              className={`text-sm xl:text-base font-medium transition-colors duration-200 ${location.pathname === '/crisis-map'
+                  ? 'text-teal-500'
+                  : 'hover:text-teal-400'
+                }`}
+            >
+              View Crisis Map
+            </Link>
             <Link
-                to="/resources"
-                className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-             >
-                 Resources Availability
-             </Link>
+              to="/resources"
+              className={`text-sm xl:text-base font-medium transition-colors duration-200 ${location.pathname === '/resources'
+                  ? 'text-teal-500'
+                  : 'hover:text-teal-400'
+                }`}
+            >
+              Resources Availability
+            </Link>
             <Link
               to="/volunteer-dashboard"
-              className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
+              className={`text-sm xl:text-base font-medium transition-colors duration-200 ${location.pathname === '/volunteer-dashboard'
+                  ? 'text-teal-500'
+                  : 'hover:text-teal-400'
+                }`}
             >
               Volunteer SignUp
             </Link>
             <Link
-                 to="/updates"
-                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
-             >
-                 Updates
-             </Link>
+              to="/updates"
+              className={`text-sm xl:text-base font-medium transition-colors duration-200 ${location.pathname === '/updates'
+                  ? 'text-teal-500'
+                  : 'hover:text-teal-400'
+                }`}
+            >
+              Updates
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -96,50 +110,52 @@ const Navbar = () => {
             </button>
           </div>
 
-            {/* Mobile Menu */}
-            {isMenuOpen && (
-                <div className="lg:hidden">
-                    <div className="px-2 pt-2 pb-3 space-y-1 bg-black">
-                        <Link
-                            to="/safe-zones"
-                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Find Safe Zone
-                        </Link>
-                        <Link
-                            to="/crisis-map"
-                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            View Crisis Map
-                        </Link>
-                        <Link
-                            to="/resources"
-                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Resources Availability
-                        </Link>
-                        <Link
-                            to="/volunteer-signup"
-                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Volunteer SignUp
-                        </Link>
-                        <Link
-                            to="/updates"
-                            className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
-                            onClick={() => setIsMenuOpen(false)}
-                        >
-                            Updates
-                        </Link>
-                    </div>
-                </div>
-            )}
-        </nav>
-    );
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="lg:hidden">
+              <div className="px-2 pt-2 pb-3 space-y-1 bg-black">
+                <Link
+                  to="/safe-zones"
+                  className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Find Safe Zone
+                </Link>
+                <Link
+                  to="/crisis-map"
+                  className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  View Crisis Map
+                </Link>
+                <Link
+                  to="/resources"
+                  className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Resources Availability
+                </Link>
+                <Link
+                  to="/volunteer-signup"
+                  className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Volunteer SignUp
+                </Link>
+                <Link
+                  to="/updates"
+                  className="block px-3 py-2 rounded-md text-base font-medium hover:text-teal-400 hover:bg-gray-800 transition-colors duration-200"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Updates
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </nav>
+  );
 }
 
 export default Navbar;

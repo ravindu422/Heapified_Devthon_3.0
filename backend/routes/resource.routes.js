@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const resourceController = require('../controllers/resource.controller');
+import { Router } from 'express';
+const router = Router();
+import { searchItem, getLowStockAlerts, getResourceStats, getDistributionCenters, getDistributionCenterById, createDistributionCenter, updateDistributionCenter, updateStock, deleteDistributionCenter } from '../controllers/resource.controller.js';
 
 /**
  * @route   GET /api/resources/search/item
@@ -8,7 +8,7 @@ const resourceController = require('../controllers/resource.controller');
  * @access  Public
  * @query   itemName (required), minStock (optional), latitude (optional), longitude (optional)
  */
-router.get('/search/item', resourceController.searchItem);
+router.get('/search/item', searchItem);
 
 /**
  * @route   GET /api/resources/alerts
@@ -16,14 +16,14 @@ router.get('/search/item', resourceController.searchItem);
  * @access  Public
  * @query   severity (optional), isActive (optional)
  */
-router.get('/alerts', resourceController.getLowStockAlerts);
+router.get('/alerts', getLowStockAlerts);
 
 /**
  * @route   GET /api/resources/stats
  * @desc    Get resource statistics
  * @access  Public
  */
-router.get('/stats', resourceController.getResourceStats);
+router.get('/stats', getResourceStats);
 
 /**
  * @route   GET /api/resources
@@ -31,7 +31,7 @@ router.get('/stats', resourceController.getResourceStats);
  * @access  Public
  * @query   latitude, longitude, maxDistance, type, status, category, district, province, hasStock, sortBy, page, limit
  */
-router.get('/', resourceController.getDistributionCenters);
+router.get('/', getDistributionCenters);
 
 /**
  * @route   GET /api/resources/:id
@@ -39,34 +39,34 @@ router.get('/', resourceController.getDistributionCenters);
  * @access  Public
  * @query   latitude (optional), longitude (optional)
  */
-router.get('/:id', resourceController.getDistributionCenterById);
+router.get('/:id', getDistributionCenterById);
 
 /**
  * @route   POST /api/resources
  * @desc    Create new distribution center
  * @access  Private/Admin
  */
-router.post('/', resourceController.createDistributionCenter);
+router.post('/', createDistributionCenter);
 
 /**
  * @route   PUT /api/resources/:id
  * @desc    Update distribution center
  * @access  Private/Admin
  */
-router.put('/:id', resourceController.updateDistributionCenter);
+router.put('/:id', updateDistributionCenter);
 
 /**
  * @route   PATCH /api/resources/:id/stock
  * @desc    Update stock item
  * @access  Private/Coordinator
  */
-router.patch('/:id/stock', resourceController.updateStock);
+router.patch('/:id/stock', updateStock);
 
 /**
  * @route   DELETE /api/resources/:id
  * @desc    Delete distribution center (soft delete)
  * @access  Private/Admin
  */
-router.delete('/:id', resourceController.deleteDistributionCenter);
+router.delete('/:id', deleteDistributionCenter);
 
-module.exports = router;
+export default router;
