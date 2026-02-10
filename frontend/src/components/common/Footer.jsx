@@ -64,7 +64,7 @@ const Footer = () => {
               <a href="#" className="block border-b border-white pb-2 hover:opacity-80 transition text-sm sm:text-base">
                 Safe Zones
               </a>
-              <a href="#" className="block border-b border-white pb-2 hover:opacity-80 transition text-sm sm:text-base">
+              <a href="/volunteer-dashboard" className="block border-b border-white pb-2 hover:opacity-80 transition text-sm sm:text-base">
                 Volunteer Registration
               </a>
               <a href="#" className="block border-b border-white pb-2 hover:opacity-80 transition text-sm sm:text-base">

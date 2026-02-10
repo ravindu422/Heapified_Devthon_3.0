@@ -87,7 +87,7 @@ const Sidebar = ({ children, activePage }) => {
                             <span className='text-base font-medium'>Resource Manage</span>
                         </a>
 
-                        <a href="/alert-manage"
+                        <a href="/publish-alert"
                             className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200
                                 ${
                                     activePage == 'alert' ? 'bg-teal-200/45 text-teal-700' : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
