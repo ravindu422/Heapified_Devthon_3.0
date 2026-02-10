@@ -1,4 +1,4 @@
-import Alert from "../models/Alert.js";
+import Alert from "../models/alert.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 //const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
