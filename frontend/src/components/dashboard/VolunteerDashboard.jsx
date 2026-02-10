@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, User, MapPin } from "lucide-react";
 import Footer from "../common/Footer";
+import { useUser } from "../../contexts/UserContext.jsx";
 
 const VolunteerDashboard = () => {
+  const { user, logout, isAuthenticated } = useUser();
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -21,11 +23,10 @@ const VolunteerDashboard = () => {
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
 
-  // This will be replaced with actual user data from backend
-  // For now, check localStorage or use a placeholder
-  const username = localStorage.getItem("username") || "Unknown user";
-  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
-  const isReturningUser = !!localStorage.getItem("username");
+  // Get user display name and email from UserContext
+  const username = isAuthenticated && user?.fullName ? user.fullName : "Unknown user";
+  const userEmail = isAuthenticated && user?.email ? user.email : "user@email.com";
+  const isReturningUser = isAuthenticated;
 
   // Dummy notification data - will be replaced with backend data
   const importantNotifications = [
@@ -100,10 +101,7 @@ const VolunteerDashboard = () => {
   }, [showProfileDropdown, showNotifications]);
 
   const handleSignOut = () => {
-    // Clear user data from localStorage
-    localStorage.removeItem("username");
-    localStorage.removeItem("userEmail");
-    // Redirect to home page
+    logout();
     window.location.href = "/";
   };
 
@@ -234,11 +232,10 @@ const VolunteerDashboard = () => {
                               onClick={() =>
                                 handleNotificationClick(notification.id)
                               }
-                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
-                                readNotifications.includes(notification.id)
-                                  ? "border border-gray-300 bg-gray-50"
-                                  : "border-2 border-blue-300 bg-blue-50"
-                              }`}
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${readNotifications.includes(notification.id)
+                                ? "border border-gray-300 bg-gray-50"
+                                : "border-2 border-blue-300 bg-blue-50"
+                                }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
@@ -470,15 +467,17 @@ const VolunteerDashboard = () => {
               </h2>
             </>
           )}
-          <p className="mt-6 text-xl text-left">
-            New Volunteer?{" "}
-            <a
-              href="/volunteer-signup"
-              className="underline cursor-pointer hover:text-teal-400 transition-colors"
-            >
-              Sign up here
-            </a>
-          </p>
+          {!isAuthenticated && (
+            <p className="mt-6 text-xl text-left">
+              New Volunteer?{" "}
+              <a
+                href="/volunteer-signup"
+                className="underline cursor-pointer hover:text-teal-400 transition-colors"
+              >
+                Sign up here
+              </a>
+            </p>
+          )}
         </div>
       </div>
 
@@ -489,78 +488,90 @@ const VolunteerDashboard = () => {
             Recent Notices
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Notice Card 1 */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+            <div
+              onClick={() => window.location.href = "/available-tasks"}
+              className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 Flood Relief Medical Assistance
               </h3>
-              <div className="flex items-center text-sm text-gray-600 mb-3">
-                <MapPin size={16} className="mr-1" />
+              <div className="flex items-center text-base text-gray-600 mb-4">
+                <MapPin size={18} className="mr-2" />
                 <span>Katugoda - Low level</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                <span className="px-4 py-2 bg-yellow-100 text-yellow-800 text-sm font-semibold rounded-full">
                   Medium Priority
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-sm text-gray-500">
                   Updated 1 Min. ago
                 </span>
               </div>
             </div>
 
             {/* Notice Card 2 */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+            <div
+              onClick={() => window.location.href = "/available-tasks"}
+              className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 Flood Evacuation Transport
               </h3>
-              <div className="flex items-center text-sm text-gray-600 mb-3">
-                <MapPin size={16} className="mr-1" />
-                <span>Moana - Lakand Dura</span>
+              <div className="flex items-center text-base text-gray-600 mb-4">
+                <MapPin size={18} className="mr-2" />
+                <span>Moanakada - Mirissa</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-red-100 text-red-800 text-xs font-medium rounded-full">
+                <span className="px-4 py-2 bg-red-100 text-red-800 text-sm font-semibold rounded-full">
                   High Priority
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-sm text-gray-500">
                   Updated 10 Min. ago
                 </span>
               </div>
             </div>
 
             {/* Notice Card 3 */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+            <div
+              onClick={() => window.location.href = "/available-tasks"}
+              className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 Temporary Shelter Setup
               </h3>
-              <div className="flex items-center text-sm text-gray-600 mb-3">
-                <MapPin size={16} className="mr-1" />
-                <span>Unknown - Island, Durable</span>
+              <div className="flex items-center text-base text-gray-600 mb-4">
+                <MapPin size={18} className="mr-2" />
+                <span>Diyatha</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                <span className="px-4 py-2 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
                   Low Priority
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-sm text-gray-500">
                   Updated 17 Min. ago
                 </span>
               </div>
             </div>
 
             {/* Notice Card 4 */}
-            <div className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow">
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">
+            <div
+              onClick={() => window.location.href = "/available-tasks"}
+              className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer"
+            >
+              <h3 className="text-xl font-bold text-gray-900 mb-4">
                 Disaster Area Translation Support
               </h3>
-              <div className="flex items-center text-sm text-gray-600 mb-3">
-                <MapPin size={16} className="mr-1" />
-                <span>Evacuation - MARCH-Dowa</span>
+              <div className="flex items-center text-base text-gray-600 mb-4">
+                <MapPin size={18} className="mr-2" />
+                <span>Beli Oya</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="px-3 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                <span className="px-4 py-2 bg-green-100 text-green-800 text-sm font-semibold rounded-full">
                   Low Priority
                 </span>
-                <span className="text-xs text-gray-500">
+                <span className="text-sm text-gray-500">
                   Updated 8 Min. ago
                 </span>
               </div>
