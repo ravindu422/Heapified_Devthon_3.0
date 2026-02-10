@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Home from "./pages/Home";
 import AlertManage from "./pages/admin/AlertManage";
+import ResourceManagement from "./pages/ResourceManagement";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Unauthorized from "./pages/Unauthorized";
@@ -27,6 +28,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/resource-manage" element={<ResourceManagement />} />
 
         {/* Unauthorized */}
         <Route path="/unauthorized" element={<Unauthorized />} />
