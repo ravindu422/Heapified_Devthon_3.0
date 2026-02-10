@@ -53,7 +53,14 @@ function App() {
           }
         />
 
-        <Route path="/resource-manage" element={<ResourceManagement />} />
+        <Route 
+          path="/resource-manage" 
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <ResourceManagement />
+            </ProtectedRoute>
+          }
+        />
 
         <Route 
            path='/publish-alert' 

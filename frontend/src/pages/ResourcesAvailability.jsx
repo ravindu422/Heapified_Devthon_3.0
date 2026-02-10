@@ -77,7 +77,7 @@ const ResourcesAvailability = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      <main className="grow">
+      <main className="grow pt-16 sm:pt-20">
         {/* Low Stock Alert Banner */}
         {alerts.length > 0 && (
           <div className="bg-white border-b border-gray-200">
@@ -143,7 +143,7 @@ const ResourcesAvailability = () => {
                           }`}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="flex-shrink-0 mt-1">
+                            <div className="shrink-0 mt-1">
                               <svg className="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                               </svg>

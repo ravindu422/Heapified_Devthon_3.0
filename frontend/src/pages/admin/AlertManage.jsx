@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import DashboardLayout from '../../components/dashboard/DashboardLayout'
+// pages/admin/AlertManage.jsx
+import React, { useState, useEffect } from 'react';
+import DashboardLayout from '../../components/dashboard/DashboardLayout';
 import alertService from '../../services/alertService';
-import { ArrowUpDown, Loader2, Plus, Search, Map, X } from 'lucide-react';
+import { ArrowUpDown, Loader2, Plus, Search, Map } from 'lucide-react';
 import AlertCard from '../../components/dashboard/alert/AlertCard';
 import { Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,7 +28,7 @@ const AlertManage = () => {
     const [alertToDelete, setAlertToDelete] = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
 
-    const [ isMapModalOpen, setIsMapModalOpen] = useState(false);
+    const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
     const fetchAlerts = async () => {
         try {
@@ -36,7 +37,7 @@ const AlertManage = () => {
                 limit: 100,
                 order: sortOrder,
                 severityLevel: severityFilter || undefined
-            })
+            });
 
             if (response.success) {
                 setAlerts(response.data || []);
@@ -61,7 +62,7 @@ const AlertManage = () => {
     const handleEdit = (alert) => {
         setEditingAlert(alert);
         setIsEditModalOpen(true);
-    }
+    };
 
     const handleUpdate = async (alertId, updateData) => {
         try {
@@ -69,12 +70,10 @@ const AlertManage = () => {
             const response = await alertService.updateAlert(alertId, updateData);
 
             if (response.success) {
-                // Update local state
                 setAlerts(prev => prev.map(a =>
                     a._id === alertId ? { ...a, ...response.data } : a
                 ));
 
-                // Close modal
                 setIsEditModalOpen(false);
                 setEditingAlert(null);
 
@@ -89,7 +88,7 @@ const AlertManage = () => {
             }
         } catch (error) {
             console.error('Update error:', error);
-            toast.error(err.message || 'Failed to update alert', {
+            toast.error(error.message || 'Failed to update alert', {
                 position: "top-right",
                 autoClose: 4000,
                 hideProgressBar: false,
@@ -100,12 +99,12 @@ const AlertManage = () => {
         } finally {
             setUpdateLoading(false);
         }
-    }
+    };
 
     const initiateDelete = (alert) => {
         setAlertToDelete(alert);
         setIsDeleteModalOpen(true);
-    }
+    };
 
     const confirmDelete = async () => {
         if (!alertToDelete) return;
@@ -144,6 +143,7 @@ const AlertManage = () => {
 
     const safeAlerts = Array.isArray(alerts) ? alerts : [];
 
+    
     const filteredAlerts = safeAlerts.filter(alert => 
         alert?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
         alert?.message?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -157,10 +157,9 @@ const AlertManage = () => {
         <DashboardLayout activePage="alert">
             <ToastContainer />
             <div className="space-y-6 ml-11">
-                {/* Page Title */}
                 <h1 className='text-2xl font-semibold text-gray-900 mb-12'>Manage Emergency Alerts</h1>
 
-                {/* Search and Actions Bar */}
+                
                 <div className="flex items-center justify-between gap-4 mb-8">
                     <div className="relative max-w-xs flex-1">
                         <input
@@ -268,14 +267,10 @@ const AlertManage = () => {
                     setAlertToDelete(null);
                 }}
                 onConfirm={confirmDelete}
-             />
+            />
 
             {isMapModalOpen && (
                 <div className="fixed inset-0 z-50 flex flex-col animate-in fade-in duration-300">
-                    {/* We don't need a wrapper with padding/margins anymore.
-                        The InteractiveMap component now handles the full layout including
-                        the close button and sidebar.
-                    */}
                     <div className="w-full h-full bg-white shadow-2xl relative">
                         <InteractiveMap 
                             alerts={safeAlerts} 

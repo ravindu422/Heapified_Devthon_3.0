@@ -503,42 +503,42 @@ export async function updateDistributionCenter(req, res) {
  * @route   PATCH /api/resources/:id/stock
  * @access  Private/Coordinator
  */
-export async function updateStock(req, res) {
-  try {
-    const { itemName, currentStock } = req.body;
+// export async function updateStock(req, res) {
+//   try {
+//     const { itemName, currentStock } = req.body;
 
-    if (!itemName || currentStock === undefined) {
-      return res.status(400).json({
-        success: false,
-        message: 'Please provide item name and current stock'
-      });
-    }
+//     if (!itemName || currentStock === undefined) {
+//       return res.status(400).json({
+//         success: false,
+//         message: 'Please provide item name and current stock'
+//       });
+//     }
 
-    const center = await DistributionCenter.findById(req.params.id);
+//     const center = await DistributionCenter.findById(req.params.id);
 
-    if (!center) {
-      return res.status(404).json({
-        success: false,
-        message: 'Distribution center not found'
-      });
-    }
+//     if (!center) {
+//       return res.status(404).json({
+//         success: false,
+//         message: 'Distribution center not found'
+//       });
+//     }
 
-    await center.updateStock(itemName, currentStock);
+//     await center.updateStock(itemName, currentStock);
 
-    res.status(200).json({
-      success: true,
-      data: center
-    });
+//     res.status(200).json({
+//       success: true,
+//       data: center
+//     });
 
-  } catch (error) {
-    console.error('Error updating stock:', error);
-    res.status(400).json({
-      success: false,
-      message: 'Error updating stock',
-      error: error.message
-    });
-  }
-}
+//   } catch (error) {
+//     console.error('Error updating stock:', error);
+//     res.status(400).json({
+//       success: false,
+//       message: 'Error updating stock',
+//       error: error.message
+//     });
+//   }
+// }
 
 /**
  * @desc    Delete distribution center

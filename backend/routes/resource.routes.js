@@ -1,5 +1,5 @@
 import express from "express";
-import { getResources, searchItem, createResource, getLowStockAlerts, updateStock, getResourceStats, getDistributionCenters, getDistributionCenterById, createDistributionCenter, updateDistributionCenter, updateStock, deleteDistributionCenter } from '../controllers/resource.controller.js';
+import { getResources, searchItem, createResource, getLowStockAlerts, getResourceStats, getDistributionCenters, getDistributionCenterById, createDistributionCenter, updateDistributionCenter, updateStock, deleteDistributionCenter } from '../controllers/resource.controller.js';
 import { protect } from "../middleware/auth.middleware.js";
 import { authorizeAdmin } from "../middleware/role.middleware.js";
 
@@ -62,12 +62,6 @@ router.post('/', createDistributionCenter);
  */
 router.put('/:id', updateDistributionCenter);
 
-/**
- * @route   PATCH /api/resources/:id/stock
- * @desc    Update stock item
- * @access  Private/Coordinator
- */
-router.patch('/:id/stock', updateStock);
 
 /**
  * @route   DELETE /api/resources/:id

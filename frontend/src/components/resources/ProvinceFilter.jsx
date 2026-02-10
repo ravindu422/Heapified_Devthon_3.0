@@ -56,9 +56,9 @@ const ProvinceFilter = ({ provinces, selectedProvince, onProvinceSelect, selecte
               }`}
             >
               {expandedProvinces[province] ? (
-                <ChevronDown className="w-4 h-4 flex-shrink-0" />
+                <ChevronDown className="w-4 h-4 shrink-0" />
               ) : (
-                <ChevronRight className="w-4 h-4 flex-shrink-0" />
+                <ChevronRight className="w-4 h-4 shrink-0" />
               )}
               <span className="flex-1">{province}</span>
             </button>
