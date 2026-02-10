@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, User, ChevronLeft, ChevronRight } from "lucide-react";
+import Navbar from "../components/Navbar";
+import { useUser } from "../contexts/UserContext.jsx";
 
 const ContactAvailability = () => {
+  const navigate = useNavigate();
+  const { login, user } = useUser();
   const [activeTab, setActiveTab] = useState("contact");
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState({
@@ -16,6 +21,27 @@ const ContactAvailability = () => {
     emergencyPhone: "",
   });
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 1)); // February 2026
+
+  // Get user data from localStorage (set by volunteer signup page)
+  const getUserData = () => {
+    const userData = localStorage.getItem('volunteerData');
+    return userData ? JSON.parse(userData) : null;
+  };
+
+  // Get user display name
+  const getUserDisplayName = () => {
+    // First check if user is logged in (after successful registration)
+    if (user && user.fullName) {
+      return user.fullName;
+    }
+
+    // Then check for temporary volunteer data (during registration process)
+    const userData = getUserData();
+    if (userData && userData.firstName && userData.lastName) {
+      return `${userData.firstName} ${userData.lastName}`;
+    }
+    return 'Unknown user';
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -32,8 +58,114 @@ const ContactAvailability = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("Form submitted:", { ...formData, selectedDate, selectedTime });
+
+    // Validation
+    if (!selectedDate) {
+      alert("Please select a date for your availability");
+      return;
+    }
+
+    if (!formData.emergencyContactName || !formData.relationship || !formData.emergencyPhone) {
+      alert("Please fill in all emergency contact information");
+      return;
+    }
+
+    // Get user data from localStorage
+    const userData = getUserData();
+    if (!userData) {
+      alert("User information not found. Please start over from the beginning.");
+      navigate("/volunteer-signup");
+      return;
+    }
+
+    // Create the full date object
+    const fullDate = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), selectedDate);
+
+    // First, register the user
+    const userPayload = {
+      fullName: `${userData.firstName} ${userData.lastName}`.trim(),
+      email: userData.email,
+      password: userData.password,
+      location: userData.location,
+      photo: userData.photo,
+      skills: userData.skills,
+    };
+
+    try {
+      // Register user
+      const userResponse = await fetch("http://localhost:5080/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userPayload),
+      });
+
+      const userDataResponse = await userResponse.json();
+      console.log("User registration response:", userDataResponse);
+
+      if (!userResponse.ok) {
+        throw new Error(userDataResponse.message || "Failed to register user");
+      }
+
+      // Then save contact availability
+      const contactPayload = {
+        userId: userDataResponse.user.id,
+        availability: {
+          date: fullDate.toISOString(),
+          time: selectedTime,
+          notes: formData.notes,
+        },
+        emergencyContact: {
+          name: formData.emergencyContactName,
+          relationship: formData.relationship,
+          phone: formData.emergencyPhone,
+        },
+      };
+
+      const contactResponse = await fetch("http://localhost:5080/api/contact-availability", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(contactPayload),
+      });
+
+      const contactData = await contactResponse.json();
+      console.log("Contact availability response:", contactData);
+
+      if (!contactResponse.ok) {
+        throw new Error(contactData.message || "Failed to save contact information");
+      }
+
+      // Clear localStorage and set user data for display
+      localStorage.removeItem('volunteerData');
+
+      // Store user info for display in other pages
+      login({
+        fullName: userDataResponse.user.fullName,
+        email: userDataResponse.user.email,
+        id: userDataResponse.user.id,
+        phoneNumber: userDataResponse.user.phoneNumber,
+      });
+
+      console.log('ContactAvailability: User logged in with data:', {
+        fullName: userDataResponse.user.fullName,
+        email: userDataResponse.user.email,
+        id: userDataResponse.user.id
+      });
+
+      // Show success message and redirect to dashboard
+      alert("🎉 Registration Complete! Thank you for volunteering with SafeLanka. Your information has been saved successfully.");
+      setTimeout(() => {
+        navigate("/volunteer-dashboard");
+      }, 2000);
+    } catch (error) {
+      console.error("Error during registration:", error);
+      alert(`Registration failed: ${error.message}`);
+    }
   };
 
   // Calendar logic
@@ -99,13 +231,12 @@ const ContactAvailability = () => {
         <td key={d} className="p-2">
           <button
             onClick={() => setSelectedDate(d)}
-            className={`w-8 h-8 rounded flex items-center justify-center text-sm ${
-              selectedDate === d
-                ? "bg-teal-500 text-white"
-                : isWeekend
-                  ? "text-red-500"
-                  : "text-gray-700 hover:bg-gray-100"
-            }`}
+            className={`w-8 h-8 rounded flex items-center justify-center text-sm ${selectedDate === d
+              ? "bg-teal-500 text-white"
+              : isWeekend
+                ? "text-red-500"
+                : "text-gray-700 hover:bg-gray-100"
+              }`}
           >
             {d}
           </button>
@@ -196,26 +327,7 @@ const ContactAvailability = () => {
       {/* Main Content */}
       <main className="flex-1 p-8">
         {/* Top Bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="relative flex-1 max-w-md">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-            />
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 ml-4">
-            <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
-              <User size={20} className="text-white" />
-            </div>
-            <span className="text-gray-700">Unknown user</span>
-          </div>
-        </div>
+        <Navbar />
 
         {/* Form Content */}
         <div className="bg-white rounded-lg shadow p-8 max-w-7xl">
@@ -324,21 +436,19 @@ const ContactAvailability = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => handleTimeChange("period", "AM")}
-                      className={`flex-1 py-2 rounded ${
-                        selectedTime.period === "AM"
-                          ? "bg-teal-500 text-white"
-                          : "bg-gray-200 text-gray-700"
-                      }`}
+                      className={`flex-1 py-2 rounded ${selectedTime.period === "AM"
+                        ? "bg-teal-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                     >
                       AM
                     </button>
                     <button
                       onClick={() => handleTimeChange("period", "PM")}
-                      className={`flex-1 py-2 rounded ${
-                        selectedTime.period === "PM"
-                          ? "bg-teal-500 text-white"
-                          : "bg-gray-200 text-gray-700"
-                      }`}
+                      className={`flex-1 py-2 rounded ${selectedTime.period === "PM"
+                        ? "bg-teal-500 text-white"
+                        : "bg-gray-200 text-gray-700"
+                        }`}
                     >
                       PM
                     </button>
