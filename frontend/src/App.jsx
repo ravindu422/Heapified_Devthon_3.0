@@ -10,6 +10,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import SafeZoneFinder from './pages/SafeZoneFinder';
 import ResourcesAvailability from './pages/ResourcesAvailability';
+import ResourceManagement from "./pages/ResourceManagement";
 import Updates from './pages/Updates';
 import AlertManage from "./pages/admin/AlertManage";
 import PublishAlert from './pages/admin/PublishAlert';
@@ -66,6 +67,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/resource-manage" element={<ResourceManagement />} />
 
         <Route 
            path='/publish-alert' 

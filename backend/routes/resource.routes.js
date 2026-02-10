@@ -1,6 +1,13 @@
-import { Router } from 'express';
-const router = Router();
-import { searchItem, getLowStockAlerts, getResourceStats, getDistributionCenters, getDistributionCenterById, createDistributionCenter, updateDistributionCenter, updateStock, deleteDistributionCenter } from '../controllers/resource.controller.js';
+import express from "express";
+import { getResources, searchItem, createResource, getLowStockAlerts, updateStock, getResourceStats, getDistributionCenters, getDistributionCenterById, createDistributionCenter, updateDistributionCenter, updateStock, deleteDistributionCenter } from '../controllers/resource.controller.js';
+import { protect } from "../middleware/auth.middleware.js";
+import { authorizeAdmin } from "../middleware/role.middleware.js";
+
+const router = express.Router();
+
+router.get("/", protect, getResources);
+router.post("/", protect, authorizeAdmin, createResource);
+router.patch("/:id/stock", protect, authorizeAdmin, updateStock);
 
 /**
  * @route   GET /api/resources/search/item
