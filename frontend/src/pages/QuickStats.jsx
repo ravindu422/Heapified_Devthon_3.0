@@ -1,16 +1,73 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, User, CheckCircle, Clock, Star, MapPin } from "lucide-react";
+import { useUser } from "../contexts/UserContext.jsx";
 
 const QuickStats = () => {
+  const { user, logout, isAuthenticated } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [readNotifications, setReadNotifications] = useState([]);
+  const [stats, setStats] = useState({
+    completedTasks: 0,
+    hoursContributed: 0,
+    impactScore: 0,
+  });
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
 
-  const username = localStorage.getItem("username") || "Unknown user";
-  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
+  // Debug user context data
+  console.log('QuickStats: UserContext data:', { user, isAuthenticated });
+
+  // Get user display name and email from UserContext
+  const username = isAuthenticated && user?.fullName ? user.fullName : "Unknown user";
+  const userEmail = isAuthenticated && user?.email ? user.email : "user@email.com";
+
+  console.log('QuickStats: Display name:', username);
+  console.log('QuickStats: Display email:', userEmail);
+
+  // Fetch user statistics from backend
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        if (!isAuthenticated || !user) {
+          console.log('QuickStats: No authenticated user found');
+          setLoading(false);
+          return;
+        }
+
+        console.log('QuickStats: User data from context:', user);
+        console.log('QuickStats: User ID:', user.id);
+
+        const response = await fetch(`http://localhost:5080/api/tasks/stats/${user.id}`);
+        console.log('QuickStats: Stats response status:', response.status);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch statistics');
+        }
+
+        const data = await response.json();
+        console.log('QuickStats: Received stats data:', data);
+
+        if (data.success) {
+          setStats(data.stats);
+        }
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+        // Fallback to default values if backend fails
+        setStats({
+          completedTasks: 0,
+          hoursContributed: 0,
+          impactScore: 0,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, [isAuthenticated, user]);
 
   // Dummy notification data
   const importantNotifications = [
@@ -84,16 +141,8 @@ const QuickStats = () => {
   }, [showProfileDropdown, showNotifications]);
 
   const handleSignOut = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("userEmail");
+    logout();
     window.location.href = "/";
-  };
-
-  // Dummy stats values - will reset on page refresh
-  const stats = {
-    completedTasks: 2,
-    hoursContributed: 16,
-    impactScore: 24,
   };
 
   const handleNotificationClick = (notificationId) => {
@@ -204,11 +253,10 @@ const QuickStats = () => {
                               onClick={() =>
                                 handleNotificationClick(notification.id)
                               }
-                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
-                                readNotifications.includes(notification.id)
-                                  ? "border border-gray-300 bg-gray-50"
-                                  : "border-2 border-blue-300 bg-blue-50"
-                              }`}
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${readNotifications.includes(notification.id)
+                                ? "border border-gray-300 bg-gray-50"
+                                : "border-2 border-blue-300 bg-blue-50"
+                                }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
@@ -417,7 +465,7 @@ const QuickStats = () => {
           {/* Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             {/* Tasks Completed Card */}
-            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm">
+            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
               <div className="flex items-start justify-between mb-8">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Tasks Completed
@@ -427,14 +475,18 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-teal-600">
-                  {stats.completedTasks}
-                </p>
+                {loading ? (
+                  <p className="text-2xl font-bold text-gray-400">Loading...</p>
+                ) : (
+                  <p className="text-4xl font-bold text-teal-600">
+                    {stats.completedTasks}
+                  </p>
+                )}
               </div>
             </div>
 
             {/* Hours Contributed Card */}
-            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm">
+            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
               <div className="flex items-start justify-between mb-8">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Hours Contributed
@@ -444,16 +496,20 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-teal-600">
-                  {stats.hoursContributed}h
-                </p>
+                {loading ? (
+                  <p className="text-2xl font-bold text-gray-400">Loading...</p>
+                ) : (
+                  <p className="text-4xl font-bold text-teal-600">
+                    {stats.hoursContributed}h
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
           {/* Impact Score Card */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm">
+            <div className="bg-white rounded-lg border-2 border-teal-400 p-8 shadow-sm hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer">
               <div className="flex items-start justify-between mb-8">
                 <h2 className="text-xl font-semibold text-gray-900">
                   Impact Score
@@ -463,9 +519,13 @@ const QuickStats = () => {
                 </div>
               </div>
               <div className="text-center">
-                <p className="text-4xl font-bold text-teal-600">
-                  {stats.impactScore}
-                </p>
+                {loading ? (
+                  <p className="text-2xl font-bold text-gray-400">Loading...</p>
+                ) : (
+                  <p className="text-4xl font-bold text-teal-600">
+                    {stats.impactScore}
+                  </p>
+                )}
               </div>
             </div>
           </div>
