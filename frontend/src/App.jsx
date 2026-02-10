@@ -22,6 +22,7 @@ import QuickStats from "./pages/QuickStats";
 import AvailableTasks from "./pages/AvailableTasks";
 import MyActiveTasks from "./pages/MyActiveTasks";
 import TaskManage from './pages/admin/TaskManage';
+import Login from "./pages/Login.jsx";
 
 function App() {
   return (
