@@ -20,22 +20,7 @@ import ContactAvailability from "./pages/ContactAvailability";
 import QuickStats from "./pages/QuickStats";
 import AvailableTasks from "./pages/AvailableTasks";
 import MyActiveTasks from "./pages/MyActiveTasks";
-//import TaskManage from './pages/admin/TaskManage';
-
-// Placeholder components for new routes
-const SafeZones = () => (
-  <div className="min-h-screen pt-20 px-4">
-    <h1 className="text-3xl font-bold">Safe Zones - Coming Soon</h1>
-    <p className="mt-4 text-gray-600">This page will show safe zones and shelters.</p>
-  </div>
-);
-
-const Resources = () => (
-  <div className="min-h-screen pt-20 px-4">
-    <h1 className="text-3xl font-bold">Resources - Coming Soon</h1>
-    <p className="mt-4 text-gray-600">This page will show resource availability.</p>
-  </div>
-);
+import TaskManage from './pages/admin/TaskManage';
 
 function App() {
   return (
@@ -76,14 +61,14 @@ function App() {
            }
         />
 
-        {/* <Route 
+        <Route 
            path='/task-manage' 
            element={
              <ProtectedRoute roles={["ADMIN"]}>
               <TaskManage/>
             </ProtectedRoute>
            }
-        /> */}
+        /> 
 
         {/* Unauthorized */}
         <Route path="/unauthorized" element={<Unauthorized />} />
