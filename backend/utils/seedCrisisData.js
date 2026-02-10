@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const {
+import mongoose from 'mongoose';
+import dotenv from 'dotenv';
+import {
   ActiveAlert,
   CurrentSituation,
   IntelligenceMetrics,
@@ -7,7 +8,9 @@ const {
   PopulationTrendPoint,
   GeographicRisk,
   Recommendation
-} = require('../models/Crisis.model');
+} from '../models/Crisis.model.js';
+
+dotenv.config();
 
 // Sample data for testing
 const seedData = async () => {
@@ -28,7 +31,7 @@ const seedData = async () => {
     // Seed Active Alert
     const activeAlert = await ActiveAlert.create({
       type: 'FLOOD ALERT',
-      province: 'WESTERN PROVINCE',
+      province: 'Western Province',
       message: 'Evacuation ongoing in Colombo, Gampaha',
       isActive: true,
       updatedAt: new Date(Date.now() - 8 * 60000) // 8 minutes ago
@@ -41,6 +44,7 @@ const seedData = async () => {
         type: 'Floods',
         severity: 'High',
         affectedDistricts: 5,
+        affectedAreas: '5 Districts in Western Province',
         riskLevel: 'High Risk',
         color: 'red',
         isActive: true,
@@ -49,6 +53,7 @@ const seedData = async () => {
       {
         type: 'Landslides',
         severity: 'Warning',
+        affectedDistricts: 2,
         affectedAreas: '2 Areas reported',
         riskLevel: 'Medium Risk',
         color: 'orange',
@@ -58,6 +63,7 @@ const seedData = async () => {
       {
         type: 'Strong Winds',
         severity: 'Low',
+        affectedDistricts: 1,
         affectedAreas: 'Coastal areas',
         riskLevel: 'Low Risk',
         color: 'yellow',
@@ -72,20 +78,21 @@ const seedData = async () => {
       peopleAffected: 12450,
       peopleAffectedTrend: 'Increasing',
       homesDamaged: 3120,
-      homesDamagedImpact: 'High Impact',
+      homesDamagedImpact: 'Concentrated in flood zones',
       safeZonesActive: 28,
       safeZonesStatus: 'Stable',
       riskEscalation: 62,
-      riskEscalationTime: 'Next 24 Hours',
+      riskEscalationTime: 'Within next 12-24 hours',
       updatedAt: new Date()
     });
     console.log('✅ Created intelligence metrics');
 
     // Seed Risk Probabilities
     const riskProbabilities = await RiskProbability.insertMany([
-      { type: 'Flood', probability: 85 },
-      { type: 'Landslides', probability: 65 },
-      { type: 'Strong Winds', probability: 45 }
+      { type: 'Floods', probability: 85, updatedAt: new Date() },
+      { type: 'Landslides', probability: 65, updatedAt: new Date() },
+      { type: 'Strong Winds', probability: 45, updatedAt: new Date() },
+      { type: 'Drought', probability: 20, updatedAt: new Date() }
     ]);
     console.log('✅ Created risk probabilities');
 
@@ -104,22 +111,22 @@ const seedData = async () => {
 
     // Seed Geographic Risk Distribution
     const geographicRisks = await GeographicRisk.insertMany([
-      { district: 'Western Province', percentage: 35 },
-      { district: 'Sabaragamuwa Province', percentage: 25 },
-      { district: 'Central Province', percentage: 20 },
-      { district: 'Southern Province', percentage: 12 },
-      { district: 'Other Areas', percentage: 8 }
+      { district: 'Colombo', percentage: 35, updatedAt: new Date() },
+      { district: 'Gampaha', percentage: 25, updatedAt: new Date() },
+      { district: 'Kalutara', percentage: 20, updatedAt: new Date() },
+      { district: 'Ratnapura', percentage: 12, updatedAt: new Date() },
+      { district: 'Kegalle', percentage: 8, updatedAt: new Date() }
     ]);
     console.log('✅ Created geographic risk data');
 
     // Seed Recommendation
     const recommendation = await Recommendation.create({
-      message: 'Residents in Western Province should prepare for possible evacuation within the next 6-12 hours.',
+      message: '⚠️ Residents in Western Province should prepare for possible evacuation within the next 6-12 hours. Monitor updates regularly.',
       isActive: true
     });
     console.log('✅ Created recommendation');
 
-    console.log('🎉 Seed data created successfully!');
+    console.log('\n🎉 Seed data created successfully!');
     console.log('📊 Summary:');
     console.log(`   - Active Alerts: 1`);
     console.log(`   - Current Situations: ${situations.length}`);
@@ -139,10 +146,8 @@ const seedData = async () => {
 const runSeed = async () => {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/safelanka', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
+    const mongoUri = process.env.MONGODB_URI;
+    await mongoose.connect(mongoUri);
     console.log('✅ Connected to MongoDB');
 
     await seedData();
@@ -158,10 +163,5 @@ const runSeed = async () => {
   }
 };
 
-// Export for use in other files
-module.exports = { seedData, runSeed };
-
-// Run if called directly
-if (require.main === module) {
-  runSeed();
-}
+// Run the seed
+runSeed();
