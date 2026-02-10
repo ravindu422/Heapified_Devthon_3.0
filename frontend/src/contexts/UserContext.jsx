@@ -29,6 +29,14 @@ export const UserProvider = ({ children }) => {
     } else {
       console.log('UserContext: No user found in localStorage');
       // Don't automatically create test user - let user register/login properly
+
+      // Clear any old test user data that might exist
+      const oldTestUser = localStorage.getItem('username');
+      if (oldTestUser) {
+        console.log('UserContext: Clearing old test user data');
+        localStorage.removeItem('username');
+        localStorage.removeItem('userEmail');
+      }
     }
   }, []);
 
