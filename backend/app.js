@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 
 import authRoutes from './routes/auth.routes.js';
 import alertRoutes from './routes/alertRoutes.js';
+import resourceRoutes from './routes/resource.routes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
 
 const app = express();
@@ -42,6 +43,7 @@ app.get('/health', (req, res) => {
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api/resources', resourceRoutes);
 
 // Error handling (must be last)
 app.use(notFound);
