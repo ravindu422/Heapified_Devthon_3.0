@@ -144,7 +144,7 @@ const VolunteerDashboard = () => {
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
+            <div className="hidden lg:flex items-start space-x-6 xl:space-x-8">
               <a
                 href="/"
                 className="text-sm xl:text-base font-medium hover:text-teal-400 transition-colors duration-200"
