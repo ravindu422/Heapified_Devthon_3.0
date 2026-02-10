@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { logger } from "../utils/logger.js";
 
+
 const buildConnectOptions = () => ({
   serverSelectionTimeoutMS: 8000,
   connectTimeoutMS: 10000,
@@ -45,13 +46,13 @@ export const connectDB = async () => {
   }
 };
 
-//Connection events
+// Connection events
 mongoose.connection.on("connected", () => {
-  logger.success("Mongoose connecting");
+  logger.success("Mongoose connected");
 });
 
 mongoose.connection.on("error", (err) => {
-  logger.error("Mongoose error:", err);
+  logger.error("Mongoose error:", err.message);
 });
 
 mongoose.connection.on("disconnected", () => {

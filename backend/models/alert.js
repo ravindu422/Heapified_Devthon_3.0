@@ -1,4 +1,4 @@
-import mongoose, { now } from "mongoose";
+import mongoose from "mongoose";
 
 const alertSchema = new mongoose.Schema({
     title: {
@@ -88,6 +88,6 @@ alertSchema.virtual('timeAgo').get(function() {
     return `${days} day${days > 1 ? 's' : ''} ago`;
 });
 
-const Alert = mongoose.model('Alert', alertSchema);
+const Alert = mongoose.models.Alert || mongoose.model('Alert', alertSchema);
 
 export default Alert;

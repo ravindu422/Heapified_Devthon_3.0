@@ -20,7 +20,7 @@ export default function Login() {
 
       // ✅ FIX HERE
       if (res.user.role === "ADMIN") {
-        navigate("/alert-manage");
+        navigate("/manage-alert");
       } else {
         navigate("/");
       }

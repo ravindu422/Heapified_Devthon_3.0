@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { connectDB } from "./config/db.js";
 import { intiSocket } from "./config/socket.js";
 import app from "./app.js";
@@ -6,7 +7,7 @@ import http from 'http';
 import dns from "dns";
 import { logger } from "./utils/logger.js";
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5080;
 const allowedOrigins = process.env.ALLOWED_ORIGINS;
 
 const server = http.createServer(app);
