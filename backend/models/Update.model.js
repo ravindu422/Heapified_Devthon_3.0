@@ -46,7 +46,6 @@ const updateSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number], // [longitude, latitude]
-      index: '2dsphere'
     },
     address: String,
     city: String,
