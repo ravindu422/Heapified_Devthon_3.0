@@ -26,8 +26,8 @@ export default function Register() {
         password: form.password,
       });
 
-      // Always go to login after register
-      navigate("/login");
+      // Always go to volunteer signup after register
+      navigate("/volunteer-signup");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
     }
@@ -76,7 +76,7 @@ export default function Register() {
 
       <p className="auth-link">
         Already have an account?{" "}
-        <Link to="/login">Login here</Link>
+        <Link to="/volunteer-signup">Go to Volunteer Signup</Link>
       </p>
     </AuthCard>
   );
