@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, User, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext.jsx";
 
 const MyActiveTasks = () => {
+  const { user, logout, isAuthenticated } = useUser();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState("all");
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
@@ -10,11 +14,70 @@ const MyActiveTasks = () => {
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const [newStatus, setNewStatus] = useState(null);
   const [readNotifications, setReadNotifications] = useState([]);
+  const [activeTasks, setActiveTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
 
-  const username = localStorage.getItem("username") || "Unknown user";
-  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
+  // Get user display name and email from UserContext
+  const username = isAuthenticated && user?.fullName ? user.fullName : "Unknown user";
+  const userEmail = isAuthenticated && user?.email ? user.email : "user@email.com";
+
+  // Fetch user's active tasks from backend
+  useEffect(() => {
+    const fetchActiveTasks = async () => {
+      try {
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        console.log('MyActiveTasks: Logged in user:', loggedInUser);
+
+        if (!loggedInUser) {
+          console.log('MyActiveTasks: No logged in user found');
+          setLoading(false);
+          return;
+        }
+
+        const user = JSON.parse(loggedInUser);
+        console.log('MyActiveTasks: User data:', user);
+        console.log('MyActiveTasks: Fetching tasks for user ID:', user.id);
+
+        const response = await fetch(`http://localhost:5080/api/tasks/my-active/${user.id}`);
+        console.log('MyActiveTasks: Response status:', response.status);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch active tasks');
+        }
+
+        const data = await response.json();
+        console.log('MyActiveTasks: Received data:', data);
+        setActiveTasks(data.tasks || []);
+      } catch (error) {
+        console.error('Error fetching active tasks:', error);
+        // Fallback to sample data if backend fails
+        setActiveTasks([
+          {
+            id: 1,
+            title: "Flood Relief Medical Assistance",
+            description: "Providing basic medical care and first aid to people affected by flooding. Supporting doctors, treating minor injuries, and helping manage patients at the relief site",
+            status: "available",
+            date: "13.01.2026",
+            priorityColor: "yellow",
+          },
+          {
+            id: 2,
+            title: "Temporary Shelter Setup",
+            description: "Assisting in setting up temporary shelters for displaced families. Helping with tents, basic structures, and ensuring safe and organized shelter spaces",
+            status: "active",
+            date: "10.01.2026",
+            priorityColor: "red",
+          },
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchActiveTasks();
+  }, []);
 
   // Dummy notification data
   const importantNotifications = [
@@ -88,8 +151,7 @@ const MyActiveTasks = () => {
   }, [showProfileDropdown, showNotifications]);
 
   const handleSignOut = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("userEmail");
+    logout();
     window.location.href = "/";
   };
 
@@ -103,44 +165,7 @@ const MyActiveTasks = () => {
   };
 
   // Sample active tasks data - resets on page refresh (not stored in localStorage)
-  const [activeTasks, setActiveTasks] = useState([
-    {
-      id: 1,
-      title: "Flood Relief Medical Assistance",
-      description:
-        "Providing basic medical care and first aid to people affected by flooding. Supporting doctors, treating minor injuries, and helping manage patients at the relief site",
-      status: "available",
-      date: "13.01.2026",
-      priorityColor: "yellow",
-    },
-    {
-      id: 2,
-      title: "Temporary Shelter Setup",
-      description:
-        "Assisting in setting up temporary shelters for displaced families. Helping with tents, basic structures, and ensuring safe and organized shelter spaces",
-      status: "active",
-      date: "10.01.2026",
-      priorityColor: "red",
-    },
-    {
-      id: 3,
-      title: "Emergency Food Packing & Distribution Support",
-      description:
-        "Assisted in packing, sorting, and distributing food supplies for affected families. Helped ensure food items were prepared efficiently and delivered in an organized and timely manner",
-      status: "completed",
-      date: "14.12.2025",
-      priorityColor: "red",
-    },
-    {
-      id: 4,
-      title: "Relief Supply Logistics Coordination",
-      description:
-        "Supported the coordination and tracking of relief supplies at a distribution center. Helped organize incoming resources, update stock records, and assist with dispatching supplies to affected areas",
-      status: "completed",
-      date: "02.12.2025",
-      priorityColor: "green",
-    },
-  ]);
+  // This is now handled by the useEffect hook above
 
   const handleStatusClick = (taskId, currentStatus) => {
     if (currentStatus === "available") {
@@ -155,25 +180,57 @@ const MyActiveTasks = () => {
     // Completed tasks don't change status
   };
 
-  const confirmStatusChange = () => {
-    const today = new Date();
-    const formattedDate = `${String(today.getDate()).padStart(2, "0")}.${String(today.getMonth() + 1).padStart(2, "0")}.${today.getFullYear()}`;
+  const confirmStatusChange = async () => {
+    try {
+      const today = new Date();
+      const formattedDate = `${String(today.getDate()).padStart(2, "0")}.${String(today.getMonth() + 1).padStart(2, "0")}.${today.getFullYear()}`;
 
-    setActiveTasks((prevTasks) =>
-      prevTasks.map((task) =>
-        task.id === selectedTaskId
-          ? {
+      // Update local state immediately for better UX
+      setActiveTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === selectedTaskId
+            ? {
               ...task,
               status: newStatus,
               date: formattedDate,
             }
-          : task,
-      ),
-    );
+            : task,
+        ),
+      );
 
-    setShowStatusModal(false);
-    setSelectedTaskId(null);
-    setNewStatus(null);
+      // Call backend to update status
+      const response = await fetch(`http://localhost:5080/api/tasks/${selectedTaskId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update task status');
+      }
+
+      console.log('Task status updated successfully');
+    } catch (error) {
+      console.error('Error updating task status:', error);
+      // Revert local state if backend fails
+      setActiveTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === selectedTaskId
+            ? {
+              ...task,
+              status: newStatus === 'active' ? 'available' : 'active',
+            }
+            : task,
+        ),
+      );
+      alert('Failed to update task status');
+    } finally {
+      setShowStatusModal(false);
+      setSelectedTaskId(null);
+      setNewStatus(null);
+    }
   };
 
   const cancelStatusChange = () => {
@@ -324,11 +381,10 @@ const MyActiveTasks = () => {
                               onClick={() =>
                                 handleNotificationClick(notification.id)
                               }
-                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
-                                readNotifications.includes(notification.id)
-                                  ? "border border-gray-300 bg-gray-50"
-                                  : "border-2 border-blue-300 bg-blue-50"
-                              }`}
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${readNotifications.includes(notification.id)
+                                ? "border border-gray-300 bg-gray-50"
+                                : "border-2 border-blue-300 bg-blue-50"
+                                }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
@@ -550,59 +606,70 @@ const MyActiveTasks = () => {
 
           {/* Tasks Table */}
           <div className="bg-white rounded-lg shadow overflow-hidden">
-            {/* Table Header */}
-            <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
-              <div className="col-span-6">Title</div>
-              <div className="col-span-3 text-center">Status</div>
-              <div className="col-span-3 text-center">Date</div>
-            </div>
+            {loading ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-gray-500">Loading your active tasks...</div>
+              </div>
+            ) : filteredTasks.length === 0 ? (
+              <div className="flex items-center justify-center py-12">
+                <div className="text-gray-500">No active tasks found. Go to Available Tasks to accept new tasks.</div>
+              </div>
+            ) : (
+              <>
+                {/* Table Header */}
+                <div className="grid grid-cols-12 gap-4 px-6 py-4 bg-gray-50 border-b border-gray-200 font-semibold text-gray-700">
+                  <div className="col-span-6">Title</div>
+                  <div className="col-span-3 text-center">Status</div>
+                  <div className="col-span-3 text-center">Date</div>
+                </div>
 
-            {/* Table Body */}
-            <div className="divide-y divide-gray-200">
-              {filteredTasks.map((task) => (
-                <div
-                  key={task.id}
-                  className="grid grid-cols-12 gap-4 px-6 py-6 hover:bg-gray-50 transition-colors"
-                >
-                  {/* Title Column */}
-                  <div className="col-span-6">
-                    <div className="flex items-start gap-3">
-                      <div
-                        className={`w-3 h-3 rounded-full ${getDotColor(task.priorityColor)} mt-1 flex-shrink-0`}
-                      ></div>
-                      <div>
-                        <h3 className="font-semibold text-gray-900 mb-2">
-                          {task.title}
-                        </h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">
-                          {task.description}
-                        </p>
+                {/* Table Body */}
+                <div className="divide-y divide-gray-200">
+                  {filteredTasks.map((task) => (
+                    <div
+                      key={task.id}
+                      className="grid grid-cols-12 gap-4 px-6 py-6 hover:bg-gray-50 transition-colors"
+                    >
+                      {/* Title Column */}
+                      <div className="col-span-6">
+                        <div className="flex items-start gap-3">
+                          <div
+                            className={`w-3 h-3 rounded-full ${getDotColor(task.priorityColor)} mt-1 flex-shrink-0`}
+                          ></div>
+                          <div>
+                            <h3 className="font-semibold text-gray-900 mb-2">
+                              {task.title}
+                            </h3>
+                            <p className="text-sm text-gray-600 leading-relaxed">
+                              {task.description}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Status Column */}
+                      <div className="col-span-3 flex items-center justify-center">
+                        <button
+                          onClick={() => handleStatusClick(task.id, task.status)}
+                          disabled={task.status === "completed"}
+                          className={`px-6 py-2 border-2 rounded-full text-sm font-medium ${getStatusBadgeColor(task.status)} ${task.status !== "completed"
+                            ? "cursor-pointer hover:opacity-80 transition-opacity"
+                            : "cursor-default"
+                            }`}
+                        >
+                          {getStatusLabel(task.status)}
+                        </button>
+                      </div>
+
+                      {/* Date Column */}
+                      <div className="col-span-3 flex items-center justify-center">
+                        <span className="text-gray-700">{task.date}</span>
                       </div>
                     </div>
-                  </div>
-
-                  {/* Status Column */}
-                  <div className="col-span-3 flex items-center justify-center">
-                    <button
-                      onClick={() => handleStatusClick(task.id, task.status)}
-                      disabled={task.status === "completed"}
-                      className={`px-6 py-2 border-2 rounded-full text-sm font-medium ${getStatusBadgeColor(task.status)} ${
-                        task.status !== "completed"
-                          ? "cursor-pointer hover:opacity-80 transition-opacity"
-                          : "cursor-default"
-                      }`}
-                    >
-                      {getStatusLabel(task.status)}
-                    </button>
-                  </div>
-
-                  {/* Date Column */}
-                  <div className="col-span-3 flex items-center justify-center">
-                    <span className="text-gray-700">{task.date}</span>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </>
+            )}
           </div>
         </div>
       </div>
