@@ -26,8 +26,25 @@ const userSchema = new mongoose.Schema(
       enum: ["USER", "ADMIN"],
       default: "USER",
     },
+
+    // New fields for Volunteer SignUp
+    location: {
+      type: String,
+      trim: true,
+    },
+    photo: {
+      type: String, // URL of the uploaded photo
+    },
+    skills: {
+      medical: { type: Boolean, default: false },
+      translation: { type: Boolean, default: false },
+      construction: { type: Boolean, default: false },
+      foodDistribution: { type: Boolean, default: false },
+      logistics: { type: Boolean, default: false },
+      transport: { type: Boolean, default: false },
+    },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 // Compare password
