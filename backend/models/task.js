@@ -38,6 +38,17 @@ const taskSchema = new mongoose.Schema(
       enum: ["Pending", "In Progress", "Completed"],
       default: "Pending",
     },
+
+    volunteerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: false,
+    },
+
+    originalTaskId: {
+      type: Number,
+      required: false,
+    },
   },
   { timestamps: true }
 );
