@@ -31,13 +31,13 @@ const CriticalAlertsBanner = ({ alerts }) => {
             </div>
           </div>
 
-          <Link
+          {/* <Link
             to="#critical"
             className="flex-shrink-0 flex items-center gap-2 px-4 py-2 bg-white hover:bg-gray-100 text-red-600 rounded-lg font-semibold transition-colors"
           >
             <span>View Details</span>
             <ChevronRight className="w-5 h-5" />
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

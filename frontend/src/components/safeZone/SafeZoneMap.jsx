@@ -79,14 +79,14 @@ const SafeZoneMap = ({ safeZones, userLocation }) => {
 
   const center = userLocation
     ? [userLocation.latitude, userLocation.longitude]
-    : [6.9271, 79.8612]; // Default to Colombo
+    : [6.9271, 79.8612];
 
   const getMarkerColor = (safeZone) => {
     const percentage = safeZone.occupancyPercentage || 0;
-    if (percentage >= 95) return '#EF4444'; // Red
-    if (percentage >= 85) return '#F97316'; // Orange
-    if (percentage >= 65) return '#EAB308'; // Yellow
-    return '#10B981'; // Green
+    if (percentage >= 95) return '#EF4444';
+    if (percentage >= 85) return '#F97316';
+    if (percentage >= 65) return '#EAB308';
+    return '#10B981';
   };
 
   const handleGetDirections = (safeZone) => {
@@ -96,141 +96,139 @@ const SafeZoneMap = ({ safeZones, userLocation }) => {
   };
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-md">
-      <MapContainer
-        center={center}
-        zoom={12}
-        style={{ height: '600px', width: '100%' }}
-        ref={mapRef}
-      >
-        <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-                    subdomains="abcd"
-        />
-        
-        <MapUpdater center={center} />
-
-        {/* User Location Marker */}
-        {userLocation && (
-          <>
-            <Marker
-              position={[userLocation.latitude, userLocation.longitude]}
-              icon={userLocationIcon}
-            >
-              <Popup>
-                <div className="p-2">
-                  <p className="font-semibold text-blue-600">Your Location</p>
-                </div>
-              </Popup>
-            </Marker>
-            
-            {/* Circle showing search radius */}
-            <Circle
-              center={[userLocation.latitude, userLocation.longitude]}
-              radius={5000} // 5km radius
-              pathOptions={{
-                fillColor: '#3B82F6',
-                fillOpacity: 0.1,
-                color: '#3B82F6',
-                weight: 1
-              }}
-            />
-          </>
-        )}
-
-        {/* Safe Zone Markers */}
-        {safeZones.map((safeZone) => {
-          if (!safeZone.location?.coordinates) return null;
+    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-md" style={{ position: 'relative', zIndex: 0 }}>
+      <div style={{ height: '600px', width: '100%', position: 'relative', zIndex: 0 }}>
+        <MapContainer
+          center={center}
+          zoom={12}
+          style={{ height: '100%', width: '100%' }}
+          ref={mapRef}
+          scrollWheelZoom={true}
+          zoomControl={true}
+        >
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
+            subdomains="abcd"
+          />
           
-          const position = [
-            safeZone.location.coordinates[1], // latitude
-            safeZone.location.coordinates[0]  // longitude
-          ];
+          <MapUpdater center={center} />
 
-          return (
-            <Marker
-              key={safeZone._id}
-              position={position}
-              icon={createCustomIcon(getMarkerColor(safeZone))}
-              eventHandlers={{
-                click: () => setSelectedZone(safeZone)
-              }}
-            >
-              <Popup maxWidth={300}>
-                <div className="p-3 min-w-[250px]">
-                  {/* Name */}
-                  <h3 className="font-bold text-gray-900 mb-1 text-base">
-                    {safeZone.name}
-                  </h3>
-                  
-                  {/* Type and Distance */}
-                  <p className="text-sm text-gray-600 mb-3">
-                    {safeZone.type} • {safeZone.distance?.toFixed(1) || '0.0'} km away
-                  </p>
-
-                  {/* Capacity */}
-                  <div className="mb-3">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs text-gray-600">Capacity</span>
-                      <span className="text-xs font-semibold text-gray-900">
-                        {safeZone.capacity?.current || 0}/{safeZone.capacity?.max || 0}
-                      </span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2">
-                      <div
-                        className={`h-full rounded-full ${
-                          safeZone.occupancyPercentage >= 95 ? 'bg-red-500' :
-                          safeZone.occupancyPercentage >= 85 ? 'bg-orange-500' :
-                          safeZone.occupancyPercentage >= 65 ? 'bg-yellow-500' :
-                          'bg-green-500'
-                        }`}
-                        style={{ width: `${safeZone.occupancyPercentage || 0}%` }}
-                      ></div>
-                    </div>
+          {/* User Location Marker */}
+          {userLocation && (
+            <>
+              <Marker
+                position={[userLocation.latitude, userLocation.longitude]}
+                icon={userLocationIcon}
+              >
+                <Popup>
+                  <div className="p-2">
+                    <p className="font-semibold text-blue-600">Your Location</p>
                   </div>
+                </Popup>
+              </Marker>
+              
+              {/* Circle showing search radius */}
+              <Circle
+                center={[userLocation.latitude, userLocation.longitude]}
+                radius={5000}
+                pathOptions={{
+                  fillColor: '#3B82F6',
+                  fillOpacity: 0.1,
+                  color: '#3B82F6',
+                  weight: 1
+                }}
+              />
+            </>
+          )}
 
-                  {/* Amenities */}
-                  <div className="flex gap-2 mb-3">
-                    {safeZone.amenities?.water && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                        Water
-                      </span>
-                    )}
-                    {safeZone.amenities?.medical && (
-                      <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
-                        Medical
-                      </span>
-                    )}
-                    {safeZone.amenities?.power && (
-                      <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
-                        Power
-                      </span>
-                    )}
-                  </div>
+          {/* Safe Zone Markers */}
+          {safeZones.map((safeZone) => {
+            if (!safeZone.location?.coordinates) return null;
+            
+            const position = [
+              safeZone.location.coordinates[1],
+              safeZone.location.coordinates[0]
+            ];
 
-                  {/* Contact */}
-                  {safeZone.contact?.phone && (
-                    <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
-                      <Phone className="w-4 h-4" />
-                      <span>{safeZone.contact.phone}</span>
+            return (
+              <Marker
+                key={safeZone._id}
+                position={position}
+                icon={createCustomIcon(getMarkerColor(safeZone))}
+                eventHandlers={{
+                  click: () => setSelectedZone(safeZone)
+                }}
+              >
+                <Popup maxWidth={300}>
+                  <div className="p-3 min-w-[250px]">
+                    <h3 className="font-bold text-gray-900 mb-1 text-base">
+                      {safeZone.name}
+                    </h3>
+                    
+                    <p className="text-sm text-gray-600 mb-3">
+                      {safeZone.type} • {safeZone.distance?.toFixed(1) || '0.0'} km away
+                    </p>
+
+                    <div className="mb-3">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-xs text-gray-600">Capacity</span>
+                        <span className="text-xs font-semibold text-gray-900">
+                          {safeZone.capacity?.current || 0}/{safeZone.capacity?.max || 0}
+                        </span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div
+                          className={`h-full rounded-full ${
+                            safeZone.occupancyPercentage >= 95 ? 'bg-red-500' :
+                            safeZone.occupancyPercentage >= 85 ? 'bg-orange-500' :
+                            safeZone.occupancyPercentage >= 65 ? 'bg-yellow-500' :
+                            'bg-green-500'
+                          }`}
+                          style={{ width: `${safeZone.occupancyPercentage || 0}%` }}
+                        ></div>
+                      </div>
                     </div>
-                  )}
 
-                  {/* Get Directions Button */}
-                  <button
-                    onClick={() => handleGetDirections(safeZone)}
-                    className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
-                  >
-                    <Navigation className="w-4 h-4" />
-                    <span>Get Directions</span>
-                  </button>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MapContainer>
+                    <div className="flex gap-2 mb-3">
+                      {safeZone.amenities?.water && (
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                          Water
+                        </span>
+                      )}
+                      {safeZone.amenities?.medical && (
+                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                          Medical
+                        </span>
+                      )}
+                      {safeZone.amenities?.power && (
+                        <span className="text-xs bg-yellow-100 text-yellow-700 px-2 py-1 rounded">
+                          Power
+                        </span>
+                      )}
+                    </div>
+
+                    {safeZone.contact?.phone && (
+                      <div className="flex items-center gap-2 text-sm text-gray-600 mb-3">
+                        <Phone className="w-4 h-4" />
+                        <span>{safeZone.contact.phone}</span>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => handleGetDirections(safeZone)}
+                      className="w-full flex items-center justify-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+                    >
+                      <Navigation className="w-4 h-4" />
+                      <span>Get Directions</span>
+                    </button>
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MapContainer>
+      </div>
 
       {/* Map Legend */}
       <div className="bg-gray-50 border-t border-gray-200 p-4">

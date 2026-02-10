@@ -77,7 +77,7 @@ const ResourcesAvailability = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
 
-      <main className="flex-grow pt-16 sm:pt-20">
+      <main className="grow">
         {/* Low Stock Alert Banner */}
         {alerts.length > 0 && (
           <div className="bg-white border-b border-gray-200">

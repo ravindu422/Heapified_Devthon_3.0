@@ -139,9 +139,9 @@ const SafeZoneFinder = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       
-      <main className="flex-grow pt-16 sm:pt-20">
+      <main className="grow pt-16 sm:pt-20">
         {/* Search Bar */}
-        <div className="bg-white border-b border-gray-200 sticky top-16 sm:top-20 z-40">
+        <div className="bg-white border-b border-gray-200 top-16 sm:top-20 z-40">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
             <SearchBar
               onSearch={handleSearch}
