@@ -6,6 +6,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { UserProvider } from './contexts/UserContext.jsx';
 
 import Home from "./pages/Home";
 import AlertManage from "./pages/admin/AlertManage";
@@ -22,54 +23,56 @@ import MyActiveTasks from "./pages/MyActiveTasks";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Home />} />
-          
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-          
-        <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
-        <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
-        <Route path="/contact-availability" element={<ContactAvailability />} />
-        <Route path="/quick-stats" element={<QuickStats />} />
-        <Route path="/available-tasks" element={<AvailableTasks />} />
-        <Route path="/my-active-tasks" element={<MyActiveTasks />} />
-        <Route path='/crisis-map' element={<ViewCrisisMap />}/>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Home />} />
 
-        {/* Admin Routes (RBAC Protected) */}
-        <Route
-          path="/manage-alert"
-          element={
-            <ProtectedRoute roles={["ADMIN"]}>
-              <AlertManage />
-            </ProtectedRoute>
-          }
-        />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
 
-        <Route 
-           path='/publish-alert' 
-           element={
-             <ProtectedRoute roles={["ADMIN"]}>
-               <PublishAlert/>
-             </ProtectedRoute>
-           }
-        />
+          <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
+          <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
+          <Route path="/contact-availability" element={<ContactAvailability />} />
+          <Route path="/quick-stats" element={<QuickStats />} />
+          <Route path="/available-tasks" element={<AvailableTasks />} />
+          <Route path="/my-active-tasks" element={<MyActiveTasks />} />
+          <Route path='/crisis-map' element={<ViewCrisisMap />} />
 
-        {/* <Route 
-           path='/task-manage' 
-           element={
-             <ProtectedRoute roles={["ADMIN"]}>
-              <TaskManage/>
-            </ProtectedRoute>
-           }
-        /> */}
+          {/* Admin Routes (RBAC Protected) */}
+          <Route
+            path="/manage-alert"
+            element={
+              <ProtectedRoute roles={["ADMIN"]}>
+                <AlertManage />
+              </ProtectedRoute>
+            }
+          />
 
-        {/* Unauthorized */}
-        <Route path="/unauthorized" element={<Unauthorized />} />
-      </Routes>
-    </BrowserRouter>
+          <Route
+            path='/publish-alert'
+            element={
+              <ProtectedRoute roles={["ADMIN"]}>
+                <PublishAlert />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* <Route 
+             path='/task-manage' 
+             element={
+               <ProtectedRoute roles={["ADMIN"]}>
+                  <TaskManage/>
+               </ProtectedRoute>
+             }
+          /> */}
+
+          {/* Unauthorized */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 
