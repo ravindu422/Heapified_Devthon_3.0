@@ -83,7 +83,6 @@ const distributionCenterSchema = new Schema({
     coordinates: {
       type: [Number], // [longitude, latitude]
       required: [true, 'Please provide coordinates'],
-      index: '2dsphere'
     },
     address: {
       type: String,

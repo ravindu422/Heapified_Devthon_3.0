@@ -4,27 +4,33 @@ import { Link } from 'react-router-dom';
 
 const HeroSection = ({ activeAlert }) => {
   return (
-    <div className="relative">
+    <div className="relative pt-16 sm:pt-20">
       {/* Alert Banner */}
       {activeAlert && (
-        <div className="bg-red-600 text-white py-3 px-4">
+        <div className={`py-3 px-4 ${
+          activeAlert.severity === 'Critical' ? 'bg-red-600' : 'bg-orange-500'
+        } text-white`}>
           <div className="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-2">
             <div className="flex items-center gap-3">
-              <span className="bg-white text-red-600 px-3 py-1 rounded font-bold text-sm">
+              <span className="bg-white text-red-600 px-3 py-1 rounded font-bold text-sm animate-pulse">
                 LIVE
               </span>
-              <span className="font-bold">{activeAlert.type} – {activeAlert.province}</span>
+              <span className="font-bold">
+                {activeAlert.type} – {activeAlert.province}
+              </span>
               <span className="hidden sm:inline">|</span>
               <span className="text-sm">{activeAlert.message}</span>
               <span className="hidden sm:inline">|</span>
-              <span className="text-sm">Updated {activeAlert.updatedMinsAgo} mins ago</span>
+              <span className="text-sm">
+                Updated {activeAlert.updatedMinsAgo} min{activeAlert.updatedMinsAgo !== 1 ? 's' : ''} ago
+              </span>
             </div>
           </div>
         </div>
       )}
 
       {/* Hero Image Section */}
-      <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] overflow-hidden">
+      <div className="relative h-100 sm:h-125 lg:h-150 overflow-hidden">
         {/* Background Image */}
         <div 
           className="absolute inset-0 bg-cover bg-center"
@@ -33,7 +39,7 @@ const HeroSection = ({ activeAlert }) => {
           }}
         >
           {/* Overlay gradient */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-gray-50"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-gray-50"></div>
         </div>
 
         {/* Hero Content */}

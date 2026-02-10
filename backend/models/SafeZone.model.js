@@ -23,7 +23,6 @@ const safeZoneSchema = new Schema({
     coordinates: {
       type: [Number], // [longitude, latitude]
       required: [true, 'Please provide coordinates'],
-      index: '2dsphere' // For geospatial queries
     },
     address: {
       type: String,

@@ -8,9 +8,12 @@ import LiveCrisisMap from '../components/home/LiveCrisisMap';
 import RiskAnalytics from '../components/home/RiskAnalytics';
 import RecommendationBanner from '../components/home/RecommendationBanner';
 import { crisisAPI } from '../services/api';
+import alertService from '../services/alertService'; // Import alert service
+import Chatbot from '../components/home/Chatbot';
 
 const Home = () => {
   const [crisisData, setCrisisData] = useState(null);
+  //const [activeAlert, setActiveAlert] = useState(null); // Separate state for active alert
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -20,7 +23,7 @@ const Home = () => {
         setLoading(true);
         setError(null);
         
-        // Using the API service
+        // Fetch crisis overview
         const response = await crisisAPI.getOverview();
         setCrisisData(response.data);
         
@@ -48,7 +51,7 @@ const Home = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       
-      <div className="flex-grow pt-16 sm:pt-20">
+      <div className="grow">
         <HeroSection activeAlert={activeAlert} />
         
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -62,7 +65,7 @@ const Home = () => {
           ) : error ? (
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
               <div className="flex items-start gap-4">
-                <div className="bg-red-100 rounded-full w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <div className="bg-red-100 rounded-full w-12 h-12 flex items-center justify-center shrink-0">
                   <svg className="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
@@ -111,6 +114,7 @@ const Home = () => {
             </>
           )}
         </main>
+        <Chatbot />
       </div>
 
       <Footer />

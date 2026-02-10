@@ -142,7 +142,7 @@ const Updates = () => {
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Navbar />
       
-      <main className="flex-grow pt-16 sm:pt-20">
+      <main className="grow">
         {/* Critical Alerts Banner */}
         {criticalUpdates.length > 0 && (
           <CriticalAlertsBanner alerts={criticalUpdates} />

@@ -17,7 +17,7 @@ const SearchBar = ({ onSearch, onUseLocation }) => {
   return (
     <form onSubmit={handleSubmit} className="relative">
       <div className="flex items-center gap-2 border-2 border-red-400 rounded-lg p-3 bg-white">
-        <Search className="w-5 h-5 text-gray-400 flex-shrink-0" />
+        <Search className="w-5 h-5 text-gray-400 shrink-0" />
         
         <input
           type="text"

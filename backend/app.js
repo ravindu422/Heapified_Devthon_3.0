@@ -15,6 +15,7 @@ import alertRoutes from './routes/alertRoutes.js';
 import resourceRoutes from './routes/resource.routes.js';
 import safeZoneRoutes from './routes/safeZone.routes.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
+import chatbotRoutes from './routes/chatbotRoutes.js';
 
 
 const app = express();
@@ -57,6 +58,7 @@ app.use('/api/locations', locationRoutes);
 app.use('/api/task',taskRoute)
 app.use('/api/auth', authRoutes);
 app.use('/api/safe-zones', safeZoneRoutes);
+app.use('/api/chatbot', chatbotRoutes);
 
 // Error handling (must be last)
 app.use(notFound);
