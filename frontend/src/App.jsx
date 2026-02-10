@@ -43,17 +43,26 @@ function App() {
         <Route path="/available-tasks" element={<AvailableTasks />} />
         <Route path="/my-active-tasks" element={<MyActiveTasks />} />
         <Route path='/crisis-map' element={<ViewCrisisMap />}/>
-     
-          {/* Admin Routes (RBAC Protected) */}
-          <Route
-            path="/manage-alert"
-            element={
-              <ProtectedRoute roles={["ADMIN"]}>
-                <AlertManage />
-              </ProtectedRoute>
-            }
-          />
-        <Route path="/resource-manage" element={<ResourceManagement />} />
+
+        {/* Admin Routes (RBAC Protected) */}
+        <Route
+          path="/manage-alert"
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <AlertManage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route 
+          path="/resource-manage" 
+          element={
+            <ProtectedRoute roles={["ADMIN"]}>
+              <ResourceManagement />
+            </ProtectedRoute>
+          }
+        />
+
 
         <Route 
            path='/publish-alert' 

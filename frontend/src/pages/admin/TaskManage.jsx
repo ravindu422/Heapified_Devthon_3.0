@@ -1,7 +1,9 @@
 import React, { useState } from 'react'
 import DashboardLayout from '../../components/dashboard/DashboardLayout'
+import { useSearch } from '../../context/SearchContext';
 
 const TaskManage = () => {
+  const { globalSearchQuery } = useSearch();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -103,11 +105,25 @@ const TaskManage = () => {
     }
   }
 
+  const previewMatchesSearch = !globalSearchQuery || 
+    formData.title.toLowerCase().includes(globalSearchQuery.toLowerCase()) ||
+    formData.location.toLowerCase().includes(globalSearchQuery.toLowerCase()) ||
+    formData.urgency.toLowerCase().includes(globalSearchQuery.toLowerCase());
+
   return (
     <DashboardLayout activePage="task">
       <div className='px-8 py-6'>
         <h1 className='text-2xl font-semibold text-gray-900 mb-8'>Manage Tasks</h1>
 
+        {/* Search indicator */}
+        {globalSearchQuery && (
+          <div className="mb-6 bg-teal-50 border border-teal-200 rounded-lg p-3">
+            <p className="text-sm text-teal-700">
+              Searching for: <strong>{globalSearchQuery}</strong>
+            </p>
+          </div>
+        )}
+        
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-8'>
           {/* Left Column - Form */}
           <div className='lg:col-span-2'>

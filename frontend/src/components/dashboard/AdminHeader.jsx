@@ -1,25 +1,47 @@
-import { ChevronDown, Search, ShieldUser, UserRound } from 'lucide-react';
-import React, { useState } from 'react'
+import { ChevronDown, Search, UserRound, X } from 'lucide-react';
+import React from 'react';
+import { useSearch } from '../../context/SearchContext';
+import { useLocation } from 'react-router-dom';
 
 const AdminHeader = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+    const { globalSearchQuery, setGlobalSearchQuery } = useSearch();
+    const location = useLocation();
+
+    // Pages that have their own search - don't show global search
+    const pagesWithLocalSearch = ['/manage-alert'];
+    const hasLocalSearch = pagesWithLocalSearch.includes(location.pathname);
 
     return (
-        <header className='border-b border-gray-200 sticky top-0 z-20'>
+        <header className='border-b border-gray-200 sticky top-0 z-20 bg-white'>
             <div className='flex items-center justify-between px-4 sm:px-6 lg:px-8 py-5 ml-10'>
-                <div className='flex items-center max-w-xs w-full'>
-                    <div className='relative w-full'>
-                        <input 
-                            type="text"
-                            placeholder='Search...'
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className='w-full px-4 py-2 pr-10 text-sm text-gray-700 bg-gray-50 border border-gray-300 
-                                rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent'
-                        />
-                        <Search className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 w-4 h-4'/>
+                {/* Only show search input if page doesn't have local search */}
+                {!hasLocalSearch ? (
+                    <div className='flex items-center max-w-xs w-full'>
+                        <div className='relative w-full'>
+                            <input 
+                                type="text"
+                                placeholder='Search...'
+                                value={globalSearchQuery}
+                                onChange={(e) => setGlobalSearchQuery(e.target.value)}
+                                className='w-full px-4 py-2 pr-20 text-sm text-gray-700 bg-gray-50 border border-gray-300 
+                                    rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent'
+                            />
+                            {globalSearchQuery && (
+                                <button
+                                    onClick={() => setGlobalSearchQuery('')}
+                                    className='absolute right-10 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600'
+                                >
+                                    <X className='w-4 h-4'/>
+                                </button>
+                            )}
+                            <Search className='absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 w-4 h-4'/>
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className='flex items-center max-w-xs w-full'>
+                        {/* Empty div to maintain layout */}
+                    </div>
+                )}
 
                 <div className='flex items-center gap-2 mr-11'>
                     <div className='flex items-center gap-2 sm:gap-3 cursor-pointer hover:bg-gray-50 rounded-lg px-2 sm:px-3 py-2 transition-colors duration-200'>
@@ -28,14 +50,14 @@ const AdminHeader = () => {
                         </div>
 
                         <div className='hidden sm:block'>
-                            <p className='text-sm font-medium text-gray-900'>User</p>
+                            <p className='text-sm font-medium text-gray-900'>Admin</p>
                         </div>
                         <ChevronDown className='w-4 h-4 text-gray-500 hidden sm:block'/>
                     </div>
                 </div>
             </div>
         </header>
-    )
-}
+    );
+};
 
-export default AdminHeader
+export default AdminHeader;

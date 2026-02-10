@@ -1,8 +1,19 @@
 import { Box, ClipboardList, LogOut, ShieldUser, Siren } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom'; 
 
 const Sidebar = ({ children, activePage }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const navigate = useNavigate(); 
+
+    const handleLogout = () => {
+        // Clear authentication
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        
+        // Redirect to login
+        navigate('/login');
+    };
 
     return (
         <>
@@ -28,13 +39,12 @@ const Sidebar = ({ children, activePage }) => {
                 </button>
             )}
 
-            {
-                isSidebarOpen && (
-                    <div onClick={() => setIsSidebarOpen(false)}
-                        className='lg:hidden fixed inset-0 ' 
-                    />
-                )
-            }
+            {isSidebarOpen && (
+                <div 
+                    onClick={() => setIsSidebarOpen(false)}
+                    className='lg:hidden fixed inset-0 bg-black/20 z-30' 
+                />
+            )}
 
             <aside
                 className={`
@@ -66,6 +76,7 @@ const Sidebar = ({ children, activePage }) => {
                         </svg>
                     </button>
                 )}
+                
                 <div className='flex items-center gap-5 px-6 py-8 mt-1 ml-3'>
                     <ShieldUser className='w-7 h-7 text-gray-600'/>
                     <h1 className='text-2xl sm:text-3xl font-bold text-center text-gray-800'>SafeLanka</h1>
@@ -75,55 +86,69 @@ const Sidebar = ({ children, activePage }) => {
                     <h2 className='text-sm font-medium text-gray-500'>Menu</h2>
                     <div className='border-t border-gray-300 mb-6 mt-4'></div>
                     <nav className='space-y-4'>
-                        <a href="/resource-manage"
+                      
+                        <Link 
+                            to="/resource-manage"
                             className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200
                                 ${
-                                    activePage == 'resource' ? 'bg-teal-200/45 text-teal-700' : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
+                                    activePage === 'resource' 
+                                        ? 'bg-teal-200/45 text-teal-700' 
+                                        : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
                                 }
                             `}
                             onClick={() => setIsSidebarOpen(false)}
                         >
                             <Box className='w-5 h-5 shrink-0'/>
                             <span className='text-base font-medium'>Resource Manage</span>
-                        </a>
+                        </Link>
 
-                        <a href="/publish-alert"
+                        <Link 
+                            to="/publish-alert"
                             className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200
                                 ${
-                                    activePage == 'alert' ? 'bg-teal-200/45 text-teal-700' : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
+                                    activePage === 'alert' 
+                                        ? 'bg-teal-200/45 text-teal-700' 
+                                        : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
                                 }
                             `}
                             onClick={() => setIsSidebarOpen(false)}
                         >
                             <Siren className='w-5 h-5 shrink-0'/>
                             <span className='text-base font-medium'>Alert Manage</span>
-                        </a>
+                        </Link>
 
-                        <a href="/task-manage"
+                        <Link 
+                            to="/task-manage"
                             className={`w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left transition-all duration-200
                                 ${
-                                    activePage == 'task' ? 'bg-teal-200/45 text-teal-700' : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
+                                    activePage === 'task' 
+                                        ? 'bg-teal-200/45 text-teal-700' 
+                                        : 'text-gray-600 hover:bg-teal-400/10 hover:text-teal-700'
                                 }
                             `}
                             onClick={() => setIsSidebarOpen(false)}
                         >
                             <ClipboardList className='w-5 h-5 shrink-0'/>
                             <span className='text-base font-medium'>Task Management</span>
-                        </a>
+                        </Link>
                     </nav>
                 </div>
 
                 <div className='px-6 pb-14'>
                     <h2 className='text-sm font-medium text-gray-600 mb-4 mt-6'>Others</h2>
                     <div className='border-t border-gray-300 mb-6'></div>
-                    <button className='w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-teal-400/10 hover:text-teal-700 transition-all duration-200 cursor-pointer'>
+                    
+                    <button 
+                        onClick={handleLogout}
+                        className='w-full flex items-center gap-4 px-4 py-3 rounded-lg text-left text-gray-600 hover:bg-teal-400/10 hover:text-teal-700 transition-all duration-200 cursor-pointer'
+                    >
                         <LogOut className='w-5 h-5 shrink-0'/>
                         <span className='text-base font-medium'>Logout</span>
                     </button>
                 </div>
             </aside>
         </>
-    )
-}
+    );
+};
 
-export default Sidebar
+export default Sidebar;
