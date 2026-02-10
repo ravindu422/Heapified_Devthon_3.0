@@ -1,6 +1,6 @@
 import Task from "../models/task.js";
 import { validationResult } from "express-validator";
-
+import {logger} from "../utils/logger.js"
 /**
  * @desc    Create new task
  * @route   POST /api/tasks
@@ -28,6 +28,8 @@ export const createTask = async (req, res) => {
       remarks,
     });
 
+    logger.success("Task created successfully !" );
+    
     // Success response
     res.status(201).json({
       success: true,
@@ -44,7 +46,7 @@ export const createTask = async (req, res) => {
   }
 };
 
-/**
+/***
  * @desc    Get all tasks (for dashboard later)
  * @route   GET /api/tasks
  */
