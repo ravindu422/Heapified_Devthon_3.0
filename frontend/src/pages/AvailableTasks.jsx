@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Bell, User, MapPin, Phone } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "../contexts/UserContext.jsx";
 
 const AvailableTasks = () => {
+  const { user, logout, isAuthenticated } = useUser();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [showModal, setShowModal] = useState(false);
@@ -10,12 +12,51 @@ const AvailableTasks = () => {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [readNotifications, setReadNotifications] = useState([]);
+  const [tasks, setTasks] = useState([]); // Replace hardcoded tasks with state
+  const [acceptedTaskIds, setAcceptedTaskIds] = useState([]); // Track accepted tasks
   const dropdownRef = useRef(null);
   const notificationRef = useRef(null);
+
+  // Get user display name and email from UserContext
+  const username = isAuthenticated && user?.fullName ? user.fullName : "Unknown user";
+  const userEmail = isAuthenticated && user?.email ? user.email : "user@email.com";
   const navigate = useNavigate();
 
-  const username = localStorage.getItem("username") || "Unknown user";
-  const userEmail = localStorage.getItem("userEmail") || "user@email.com";
+  useEffect(() => {
+    // Fetch tasks from the backend and user's accepted tasks
+    const fetchTasksAndAccepted = async () => {
+      try {
+        // Fetch available tasks
+        const tasksResponse = await fetch("http://localhost:5080/api/tasks");
+        if (!tasksResponse.ok) {
+          throw new Error("Failed to fetch tasks");
+        }
+        const tasksData = await tasksResponse.json();
+        setTasks(tasksData.tasks);
+
+        // Fetch user's accepted tasks
+        const loggedInUser = localStorage.getItem('loggedInUser');
+        if (loggedInUser) {
+          const user = JSON.parse(loggedInUser);
+          const acceptedResponse = await fetch(`http://localhost:5080/api/tasks/my-active/${user.id}`);
+
+          if (acceptedResponse.ok) {
+            const acceptedData = await acceptedResponse.json();
+            // Extract originalTaskId from accepted tasks (this matches the sample task IDs)
+            const acceptedIds = acceptedData.tasks
+              .filter(task => task.originalTaskId) // Only include tasks with originalTaskId
+              .map(task => task.originalTaskId);
+            setAcceptedTaskIds(acceptedIds);
+            console.log('Accepted task IDs:', acceptedIds);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+
+    fetchTasksAndAccepted();
+  }, []);
 
   // Dummy notification data
   const importantNotifications = [
@@ -89,8 +130,7 @@ const AvailableTasks = () => {
   }, [showProfileDropdown, showNotifications]);
 
   const handleSignOut = () => {
-    localStorage.removeItem("username");
-    localStorage.removeItem("userEmail");
+    logout();
     window.location.href = "/";
   };
 
@@ -102,45 +142,6 @@ const AvailableTasks = () => {
     // Close the notification dropdown
     setShowNotifications(false);
   };
-
-  // Sample task data - will be replaced with backend data later
-  const tasks = [
-    {
-      id: 1,
-      priority: "medium",
-      title: "Emergency Medical Assistance",
-      location: "Kurunegala - Lake Round",
-      contact: "+94 77 345 6791",
-      contactPerson: "Mr. P. Samaraweera",
-      expectedSupport: ["Basic treatment", "Basic medicines", "Patientriage"],
-    },
-    {
-      id: 2,
-      priority: "high",
-      title: "Flood Evacuation Transport",
-      location: "Welawa - Lowland Zone",
-      contact: "+94 76 551 7709",
-      contactPerson: "Ms. K. Perera",
-      expectedSupport: [
-        "Emergency medical supplies",
-        "Assist elderly and children",
-        "Coordinate evacuation routes",
-      ],
-    },
-    {
-      id: 3,
-      priority: "low",
-      title: "Temporary Shelter Setup",
-      location: "Moladena - School Grounds",
-      contact: "+94 77 452 8896",
-      contactPerson: "Mr. R. Silva",
-      expectedSupport: [
-        "Set up tents",
-        "Distribute food rations",
-        "Secure shelter areas",
-      ],
-    },
-  ];
 
   const getPriorityColor = (priority) => {
     switch (priority) {
@@ -180,11 +181,52 @@ const AvailableTasks = () => {
     setShowModal(true);
   };
 
-  const handleConfirmAccept = () => {
-    // Here you would typically save the task to backend/local storage
-    console.log("Task accepted:", selectedTask);
-    setShowModal(false);
-    navigate("/my-active-tasks");
+  const handleConfirmAccept = async () => {
+    try {
+      // Get current user from localStorage
+      const loggedInUser = localStorage.getItem('loggedInUser');
+      console.log('AvailableTasks: Logged in user:', loggedInUser);
+
+      if (!loggedInUser) {
+        alert('Please log in to accept tasks');
+        return;
+      }
+
+      const user = JSON.parse(loggedInUser);
+      console.log('AvailableTasks: User data:', user);
+      console.log('AvailableTasks: Accepting task:', selectedTask);
+
+      // Call backend to accept task
+      const response = await fetch('http://localhost:5080/api/tasks/accept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          taskId: selectedTask.id,
+          userId: user.id
+        })
+      });
+
+      const data = await response.json();
+      console.log('AvailableTasks: Backend response:', data);
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to accept task');
+      }
+
+      console.log('Task accepted successfully:', data);
+
+      // Add the task ID to accepted tasks list to remove it from available tasks
+      setAcceptedTaskIds(prev => [...prev, selectedTask.id]);
+
+      setShowModal(false);
+      console.log('AvailableTasks: Navigating to My Active Tasks');
+      navigate("/my-active-tasks");
+    } catch (error) {
+      console.error('Error accepting task:', error);
+      alert(`Failed to accept task: ${error.message}`);
+    }
   };
 
   const handleCancelAccept = () => {
@@ -252,7 +294,7 @@ const AvailableTasks = () => {
                   {showNotifications && (
                     <div
                       ref={notificationRef}
-                      className="absolute right-0 mt-2 w-[400px] bg-white rounded-lg shadow-xl z-50 max-h-[600px] overflow-y-auto"
+                      className="absolute right-0 mt-2 w-100 bg-white rounded-lg shadow-xl z-50 max-h-150 overflow-y-auto"
                     >
                       <button
                         onClick={() => setShowNotifications(false)}
@@ -291,11 +333,10 @@ const AvailableTasks = () => {
                               onClick={() =>
                                 handleNotificationClick(notification.id)
                               }
-                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${
-                                readNotifications.includes(notification.id)
-                                  ? "border border-gray-300 bg-gray-50"
-                                  : "border-2 border-blue-300 bg-blue-50"
-                              }`}
+                              className={`rounded-lg p-4 cursor-pointer hover:opacity-80 transition-opacity ${readNotifications.includes(notification.id)
+                                ? "border border-gray-300 bg-gray-50"
+                                : "border-2 border-blue-300 bg-blue-50"
+                                }`}
                             >
                               <h4 className="text-sm font-medium text-gray-900 mb-2">
                                 {notification.title}
@@ -525,14 +566,15 @@ const AvailableTasks = () => {
             {tasks
               .filter(
                 (task) =>
-                  priorityFilter === "all" || task.priority === priorityFilter,
+                  (priorityFilter === "all" || task.priority === priorityFilter) &&
+                  !acceptedTaskIds.includes(task.id) // Filter out accepted tasks
               )
               .map((task) => {
                 const colors = getPriorityColor(task.priority);
                 return (
                   <div
                     key={task.id}
-                    className={`bg-white rounded-lg border-2 ${colors.border} p-6 shadow-sm flex flex-col`}
+                    className={`bg-white rounded-lg border-2 ${colors.border} p-6 shadow-sm flex flex-col hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer`}
                   >
                     {/* Priority Badge */}
                     <div className="flex items-center gap-2 mb-4">
@@ -553,7 +595,7 @@ const AvailableTasks = () => {
                     <div className="flex items-start gap-2 mb-2">
                       <MapPin
                         size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
+                        className="text-gray-600 mt-1 shrink-0"
                       />
                       <span className="text-sm text-gray-700">
                         Location: {task.location}
@@ -564,7 +606,7 @@ const AvailableTasks = () => {
                     <div className="flex items-start gap-2 mb-2">
                       <Phone
                         size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
+                        className="text-gray-600 mt-1 shrink-0"
                       />
                       <span className="text-sm text-gray-700">
                         Contact: {task.contact}
@@ -573,10 +615,7 @@ const AvailableTasks = () => {
 
                     {/* Contact Person */}
                     <div className="flex items-start gap-2 mb-4">
-                      <User
-                        size={16}
-                        className="text-gray-600 mt-1 flex-shrink-0"
-                      />
+                      <User size={16} className="text-gray-600 mt-1 shrink-0" />
                       <span className="text-sm text-gray-700">
                         Contact Person: {task.contactPerson}
                       </span>

@@ -6,7 +6,7 @@ export default function ProtectedRoute({ roles, children }) {
 
   // Not logged in
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/volunteer-signup" replace />;
   }
 
   // Logged in but not authorized

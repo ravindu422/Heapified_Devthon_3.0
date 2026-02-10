@@ -1,11 +1,18 @@
 import React, { useState } from "react";
-import { Search, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { User } from "lucide-react";
+import Navbar from "../components/Navbar";
+import { useUser } from "../contexts/UserContext.jsx";
 
 const VolunteerSignUp = () => {
+  const navigate = useNavigate();
+  const { login, user } = useUser();
   const [activeTab, setActiveTab] = useState("information");
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
+    email: "",
+    password: "",
     phoneNumber: "",
     location: "",
     photo: null,
@@ -18,6 +25,29 @@ const VolunteerSignUp = () => {
       transport: false,
     },
   });
+
+  // Get logged-in user data
+  const getLoggedInUser = () => {
+    return user;
+  };
+
+  // Clear logged-in user data (for new registration)
+  const clearLoggedInUser = () => {
+    // UserContext logout will handle clearing
+  };
+
+  // Get user display name
+  const getUserDisplayName = () => {
+    if (user && user.fullName) {
+      return user.fullName;
+    }
+
+    // Fallback to current form data
+    if (formData.firstName && formData.lastName) {
+      return `${formData.firstName} ${formData.lastName}`;
+    }
+    return 'Unknown user';
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,8 +78,32 @@ const VolunteerSignUp = () => {
   };
 
   const handleNext = () => {
-    console.log("Form data:", formData);
-    // Add navigation to next step
+    // Clear any existing logged-in user data when starting new registration
+    clearLoggedInUser();
+
+    // Validate required fields
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
+      alert(
+        "Please fill in all required fields: First Name, Last Name, Email, and Password",
+      );
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      alert("Password must be at least 6 characters");
+      return;
+    }
+
+    // Save form data to localStorage for later use
+    localStorage.setItem('volunteerData', JSON.stringify(formData));
+
+    // Navigate to the next page
+    navigate("/contact-availability");
   };
 
   return (
@@ -116,26 +170,7 @@ const VolunteerSignUp = () => {
       {/* Main Content */}
       <main className="flex-1 p-8">
         {/* Top Bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="relative flex-1 max-w-md">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-            />
-            <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={20}
-            />
-          </div>
-
-          <div className="flex items-center gap-2 ml-4">
-            <div className="w-10 h-10 bg-teal-500 rounded-full flex items-center justify-center">
-              <User size={20} className="text-white" />
-            </div>
-            <span className="text-gray-700">Unknown user</span>
-          </div>
-        </div>
+        <Navbar />
 
         {/* Form Content */}
         <div className="bg-white rounded-lg shadow p-8 max-w-7xl">
@@ -212,6 +247,38 @@ const VolunteerSignUp = () => {
             </div>
           </div>
 
+          {/* Email */}
+          <div className="mb-6">
+            <label className="block text-sm text-gray-700 mb-2">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              placeholder="your.email@example.com"
+              className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              required
+            />
+          </div>
+
+          {/* Password */}
+          <div className="mb-6">
+            <label className="block text-sm text-gray-700 mb-2">
+              Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
+              placeholder="At least 6 characters"
+              className="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
+              required
+            />
+          </div>
+
           {/* Phone Number */}
           <div className="mb-6">
             <label className="block text-sm text-gray-700 mb-2">
@@ -277,12 +344,13 @@ const VolunteerSignUp = () => {
 
           {/* Buttons */}
           <div className="flex items-center justify-end">
-            <a
-              href="/contact-availability"
+            <button
+              type="button"
+              onClick={handleNext}
               className="px-8 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors"
             >
               Next
-            </a>
+            </button>
           </div>
         </div>
       </main>

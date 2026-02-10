@@ -2,10 +2,10 @@ import { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 
-import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Unauthorized from "./pages/Unauthorized";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { UserProvider } from './contexts/UserContext.jsx';
 
 import Home from "./pages/Home";
 import SafeZoneFinder from './pages/SafeZoneFinder';
@@ -25,6 +25,7 @@ import TaskManage from './pages/admin/TaskManage';
 
 function App() {
   return (
+    <UserProvider>
     <BrowserRouter>
       <Routes>
         {/* Public Routes */}
@@ -34,7 +35,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path='/updates' element={<Updates />}/>
         <Route path='/safe-zones' element={<SafeZoneFinder />} />
-         <Route path='/resources' element={<ResourcesAvailability />}/>
+        <Route path='/resources' element={<ResourcesAvailability />}/>
         <Route path="/volunteer-dashboard" element={<VolunteerDashboard />} />
         <Route path="/volunteer-signup" element={<VolunteerSignUp />} />
         <Route path="/contact-availability" element={<ContactAvailability />} />
@@ -62,6 +63,7 @@ function App() {
           }
         />
 
+
         <Route 
            path='/publish-alert' 
            element={
@@ -80,10 +82,11 @@ function App() {
            }
         /> 
 
-        {/* Unauthorized */}
-        <Route path="/unauthorized" element={<Unauthorized />} />
-      </Routes>
-    </BrowserRouter>
+          {/* Unauthorized */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 
