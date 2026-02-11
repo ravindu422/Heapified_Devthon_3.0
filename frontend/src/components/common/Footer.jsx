@@ -1,5 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
+import MainLogo from '../../assets/Main_logo.png';
 
 const Footer = () => {
     const currentYear = new Date().getFullYear();
@@ -12,7 +13,7 @@ const Footer = () => {
           
           {/* Column 1: Logo and Brand Section */}
           <div className="flex flex-col items-center sm:items-start">
-            <img src="src/assets/Main_logo.png" alt="SafeLanka" className='w-56 h-56'/>
+            <img src={MainLogo} alt="SafeLanka" className='w-56 h-56'/>
           </div>
 
           {/* Column 2: SafeLanka Title */}
