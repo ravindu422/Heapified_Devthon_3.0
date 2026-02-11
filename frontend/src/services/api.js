@@ -2,12 +2,13 @@ import axios from 'axios';
 
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || 'https://heapifieddevthon30-production.up.railway.app/',
-    timeout: 10000,
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true
+  baseURL: import.meta.env.VITE_API_URL 
+    || 'https://heapifieddevthon30-production.up.railway.app',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  withCredentials: true
 });
 
 
