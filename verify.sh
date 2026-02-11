@@ -166,7 +166,7 @@ echo "   Verification Summary"
 echo "=========================================="
 echo ""
 
-if [ -f "backend/.env" ] && [ -f "backend/node_modules" ]; then
+if [ -f "backend/.env" ] && [ -d "backend/node_modules" ]; then
     success "Backend is ready"
 else
     warning "Backend needs configuration"
@@ -174,7 +174,7 @@ else
     info "2. Run: cd backend && npm install"
 fi
 
-if [ -f "frontend/node_modules" ]; then
+if [ -d "frontend/node_modules" ]; then
     success "Frontend is ready"
 else
     warning "Frontend needs configuration"
