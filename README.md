@@ -42,8 +42,14 @@ npm run dev
 
 ## 📚 Documentation
 
+**📖 [DOCS_INDEX.md](DOCS_INDEX.md) - Complete documentation index with usage guide**
+
+Quick Access:
+- **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Quick commands and after-fix checklist
 - **[VERIFICATION.md](VERIFICATION.md)** - Complete guide on how to verify fixes and changes
 - **[TESTING.md](TESTING.md)** - Comprehensive testing procedures and test cases
+- **[FLOWCHART.md](FLOWCHART.md)** - Visual decision trees and workflows
+- **[API_EXAMPLES.md](API_EXAMPLES.md)** - Practical API testing examples with curl commands
 
 ## 🔍 How to Check After a Fix
 
