@@ -1,0 +1,33 @@
+{
+  "name": "safelanka-monorepo",
+  "version": "1.0.0",
+  "description": "SafeLanka Crisis Management System - Devthon 3.0",
+  "scripts": {
+    "verify": "bash verify.sh",
+    "check-db": "cd backend && node check-database.js",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm run install:backend && npm run install:frontend",
+    "install:backend": "cd backend && npm install",
+    "install:frontend": "cd frontend && npm install",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "lint:backend": "cd backend && npm run lint 2>/dev/null || echo 'No lint script in backend'",
+    "lint:frontend": "cd frontend && npm run lint",
+    "seed": "cd backend && npm run seed:crisis",
+    "health": "curl -s http://localhost:5080/health | json_pp || curl -s http://localhost:5080/health"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ravindu422/Heapified_Devthon_3.0.git"
+  },
+  "keywords": [
+    "crisis-management",
+    "emergency-response",
+    "safelanka",
+    "devthon"
+  ],
+  "author": "Team Heapified",
+  "license": "ISC"
+}
