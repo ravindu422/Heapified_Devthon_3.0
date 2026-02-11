@@ -12,7 +12,7 @@ const Footer = () => {
           
           {/* Column 1: Logo and Brand Section */}
           <div className="flex flex-col items-center sm:items-start">
-            <img src="src/assets/Main_logo.png" alt="SafeLanka" className='w-56 h-56'/>
+            <img src="/Main_logo.png" alt="SafeLanka" className='w-56 h-56'/>
           </div>
 
           {/* Column 2: SafeLanka Title */}
