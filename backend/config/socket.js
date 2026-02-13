@@ -1,10 +1,23 @@
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { logger } from "../utils/logger.js";
 
-export const intiSocket = (server, allowedOrigins) => {
+export const intiSocket = (server, allowedOriginsEnv) => {
+  // Convert ENV string to array safely
+  const allowedOrigins = allowedOriginsEnv
+    ? allowedOriginsEnv.split(",").map((origin) => origin.trim())
+    : [];
+
   const io = new Server(server, {
     cors: {
-      origin: allowedOrigins,
+      origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
+
+        if (allowedOrigins.includes(origin)) {
+          return callback(null, origin);
+        } else {
+          return callback(new Error("Socket CORS not allowed"));
+        }
+      },
       credentials: true,
     },
   });
